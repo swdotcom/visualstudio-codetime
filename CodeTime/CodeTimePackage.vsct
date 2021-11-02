@@ -83,8 +83,7 @@
 					<ButtonText>Code Time explorer</ButtonText>
 				</Strings>
 			</Button>
-
-		</Buttons>
+    </Buttons>
 
 		<!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
 		<Bitmaps>
@@ -95,7 +94,10 @@
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
 			<Bitmap guid="guidImages1" href="Assets\SoftwareLaunchCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
 			<Bitmap guid="guidImages4" href="Assets\SoftwareDashboardLaunchCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
-		</Bitmaps>
+		  <Bitmap guid="guidImages7" href="Explorer\Resources\CodeTimeSummaryCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages8" href="Explorer\Resources\CodeTimeAppCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages9" href="Explorer\Resources\CodeTimeToggleStatusCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+    </Bitmaps>
 	</Commands>
 
 	<Symbols>
@@ -106,11 +108,14 @@
 		<GuidSymbol name="guidSoftwareCoPackageCmdSet" value="{4c763fee-fc36-4e54-a1a5-09e3872f5fa5}">
 			<IDSymbol name="SoftwareToolsGroup" value="0x1020" />
 			<IDSymbol name="cmdidSoftwareSettingsLaunchCommand" value="1000" />
-			<IDSymbol name="cmdidSoftwareLaunchCommand" value="2000" />
-			<IDSymbol name="cmdidSoftwareDashboardLaunchCommand" value="3000" />
+			<IDSymbol name="cmdidSoftwareLaunchCommand" value="3000" />
+			<IDSymbol name="cmdidSoftwareDashboardLaunchCommand" value="2000" />
 			<IDSymbol name="cmdidSoftwareToggleStatusInfoCommand" value="4000" />
 			<IDSymbol name="cmdidSoftwareOpenCodetimeTreeCommand" value="5000" />
-		</GuidSymbol>
+		  <IDSymbol value="256" name="cmdidCodeTimeSummaryCommand" />
+      <IDSymbol value="5001" name="cmdidCodeTimeAppCommand" />
+      <IDSymbol value="5002" name="cmdidCodeTimeToggleStatusCommand" />
+    </GuidSymbol>
 
 		<GuidSymbol name="guidImages" value="{54614706-87de-4c00-b8f5-888955b7804d}">
 			<IDSymbol name="bmpPic1" value="1" />
@@ -175,5 +180,32 @@
 			<IDSymbol name="bmpPicStrikethrough" value="6" />
 		</GuidSymbol>
 
-	</Symbols>
+	
+    <GuidSymbol value="{f116aadc-72db-4d56-972e-e6de0870954e}" name="guidImages7">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{3017d58e-1951-45be-9e1a-ad0895d265a8}" name="guidImages8">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{2c82f5bf-74ab-4011-81ef-d1dd0fb4067b}" name="guidImages9">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  </Symbols>
 </CommandTable>

@@ -46,12 +46,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\TreeViewCommand.cs" />
+    <Compile Include="Explorer\CodeTimeAppCommand.cs" />
     <Compile Include="Explorer\CodeTimeExplorer.cs" />
     <Compile Include="Explorer\CodeTimeExplorerCommand.cs" />
     <Compile Include="Explorer\CodeTimeExplorerControl.xaml.cs">
       <DependentUpon>CodeTimeExplorerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Explorer\CodeTimeSettingsCommand.cs" />
+    <Compile Include="Explorer\CodeTimeSummaryCommand.cs" />
+    <Compile Include="Explorer\CodeTimeToggleStatusCommand.cs" />
     <Compile Include="Managers\DocEventManager.cs" />
     <Compile Include="Managers\FileInfoManager.cs" />
     <Compile Include="Managers\FileManager.cs" />
@@ -196,8 +199,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Explorer\Resources\CodeTimeAppCommand.png" />
     <Content Include="Explorer\Resources\CodeTimeExplorerCommand.png" />
     <Content Include="Explorer\Resources\CodeTimeSettingsCommand.png" />
+    <Content Include="Explorer\Resources\CodeTimeSummaryCommand.png" />
+    <Content Include="Explorer\Resources\CodeTimeToggleStatusCommand.png" />
     <Content Include="index.html" />
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

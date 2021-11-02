@@ -80,6 +80,9 @@ namespace CodeTime
             _ = Task.Delay(10000).ContinueWith((task) => { CheckSolutionActivation(); });
             await CodeTimeExplorerCommand.InitializeAsync(this);
             await CodeTimeSettingsCommand.InitializeAsync(this);
+            await CodeTimeSummaryCommand.InitializeAsync(this);
+            await CodeTimeAppCommand.InitializeAsync(this);
+            await CodeTimeToggleStatusCommand.InitializeAsync(this);
         }
 
         public async void CheckSolutionActivation()

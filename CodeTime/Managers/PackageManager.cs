@@ -51,6 +51,46 @@ namespace CodeTime
         }
 
         [STAThread]
+        public static async Task RebuildTreeStatsAsync()
+        {
+            if (package == null)
+            {
+                return;
+            }
+
+            try
+            {
+                await package.JoinableTaskFactory.SwitchToMainThreadAsync();
+                _codeMetricsWindow = (CodeTimeExplorer)package.FindToolWindow(typeof(CodeTimeExplorer), 0, true);
+                if (_codeMetricsWindow != null && _codeMetricsWindow.Frame != null)
+                {
+                    _codeMetricsWindow.RebuildStatsButtons();
+                }
+            }
+            catch (Exception) { }
+        }
+
+        [STAThread]
+        public static async Task RebuildTreeAccountAsync()
+        {
+            if (package == null)
+            {
+                return;
+            }
+
+            try
+            {
+                await package.JoinableTaskFactory.SwitchToMainThreadAsync();
+                _codeMetricsWindow = (CodeTimeExplorer)package.FindToolWindow(typeof(CodeTimeExplorer), 0, true);
+                if (_codeMetricsWindow != null && _codeMetricsWindow.Frame != null)
+                {
+                    _codeMetricsWindow.RebuildAccountButtons();
+                }
+            }
+            catch (Exception) { }
+        }
+
+        [STAThread]
         public static async Task RebuildFlowButtons()
         {
             if (package == null)
