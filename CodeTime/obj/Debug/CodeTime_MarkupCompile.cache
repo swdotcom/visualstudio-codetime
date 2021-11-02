@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 
-3-2086623117
-3-1304615893
-64-903928789
+3-411137269
+51960749603
+66-2121227730
 226963993932
-Managers\StatusBarManager.xaml;Tree\CodeMetricsTree.xaml;Tree\SwitchAccountDialog.xaml;
+Explorer\CodeTimeExplorerControl.xaml;Managers\StatusBarManager.xaml;Explorer\SwitchAccountDialog.xaml;
 
 False
 

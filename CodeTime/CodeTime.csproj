@@ -46,6 +46,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\TreeViewCommand.cs" />
+    <Compile Include="Explorer\CodeTimeExplorer.cs" />
+    <Compile Include="Explorer\CodeTimeExplorerCommand.cs" />
+    <Compile Include="Explorer\CodeTimeExplorerControl.xaml.cs">
+      <DependentUpon>CodeTimeExplorerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Explorer\CodeTimeSettingsCommand.cs" />
     <Compile Include="Managers\DocEventManager.cs" />
     <Compile Include="Managers\FileInfoManager.cs" />
     <Compile Include="Managers\FileManager.cs" />
@@ -95,14 +101,10 @@
     <Compile Include="Snowplow\Managers\CacheManager.cs" />
     <Compile Include="Snowplow\Managers\HashManager.cs" />
     <Compile Include="Snowplow\Managers\TrackerManager.cs" />
-    <Compile Include="Tree\CodeMetricsToolPane.cs" />
-    <Compile Include="Tree\CodeMetricsTree.xaml.cs">
-      <DependentUpon>CodeMetricsTree.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Tree\CodeMetricsTreeItem.cs" />
-    <Compile Include="Tree\CodeMetricsTreeProvider.cs" />
-    <Compile Include="Tree\ProvideToolboxControlAttribute.cs" />
-    <Compile Include="Tree\SwitchAccountDialog.xaml.cs">
+    <Compile Include="Explorer\CodeMetricsTreeItem.cs" />
+    <Compile Include="Explorer\CodeMetricsTreeProvider.cs" />
+    <Compile Include="Explorer\ProvideToolboxControlAttribute.cs" />
+    <Compile Include="Explorer\SwitchAccountDialog.xaml.cs">
       <DependentUpon>SwitchAccountDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Constants.cs" />
@@ -151,15 +153,15 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Explorer\CodeTimeExplorerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Managers\StatusBarManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Tree\CodeMetricsTree.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Tree\SwitchAccountDialog.xaml">
+    <Page Include="Explorer\SwitchAccountDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -194,6 +196,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Explorer\Resources\CodeTimeExplorerCommand.png" />
+    <Content Include="Explorer\Resources\CodeTimeSettingsCommand.png" />
     <Content Include="index.html" />
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

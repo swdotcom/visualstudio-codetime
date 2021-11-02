@@ -286,7 +286,7 @@ namespace CodeTime
                     {
                         foreach (IntegrationConnection integrationConnection in integrationConnections)
                         {
-                            if (integrationConnection.integration_type.Equals(type.ToLower()))
+                            if (integrationConnection.name.Equals(type.ToLower()))
                             {
                                 integrations.Add(integrationConnection);
                             }

@@ -9,14 +9,13 @@ using System.Windows.Media;
 namespace CodeTime
 {
     /// <summary>
-    /// Interaction logic for CodeMetricsTree.xaml
+    /// Interaction logic for CodeTimeExplorerControl.
     /// </summary>
-    public partial class CodeMetricsTree : UserControl
+    public partial class CodeTimeExplorerControl : UserControl
     {
-
         private static IDictionary<string, bool> expandMap = new Dictionary<string, bool>();
 
-        public CodeMetricsTree()
+        public CodeTimeExplorerControl()
         {
             InitializeComponent();
 

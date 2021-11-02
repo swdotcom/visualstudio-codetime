@@ -22,7 +22,7 @@
 
 	<!--The Commands section is where commands, menus, and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
-	<Commands package="guidCodeTime">
+	<Commands package="guidSoftwareCoPackage">
 		<!-- Inside this section we have different sub-sections: one for the menus, another
     for the menu groups, one for the buttons (the actual commands), one for the combos
     and the last one for the bitmaps used. Each element is identified by a command id that
@@ -36,7 +36,7 @@
          group as the part of a menu contained between two lines. The parent of a group
          must be a menu. -->
 		<Groups>
-			<Group guid="guidCodeTimeCmdSet" id="CodeTimeGroup" priority="0x0600">
+			<Group guid="guidSoftwareCoPackageCmdSet" id="SoftwareToolsGroup" priority="0x0600">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
 			</Group>
 		</Groups>
@@ -53,8 +53,32 @@
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
 
-			<Button guid="guidCodeTimeCmdSet" id="cmdidTreeViewCommand" priority="0x0500" type="Button">
-				<Parent guid="guidCodeTimeCmdSet" id="CodeTimeGroup" />
+			<Button guid="guidSoftwareCoPackageCmdSet" id="cmdidSoftwareSettingsLaunchCommand" priority="0x0000" type="Button">
+				<Parent guid="guidSoftwareCoPackageCmdSet" id="SoftwareToolsGroup" />
+				<Strings>
+					<ButtonText>Settings</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidSoftwareCoPackageCmdSet" id="cmdidSoftwareDashboardLaunchCommand" priority="0x0100" type="Button">
+				<Parent guid="guidSoftwareCoPackageCmdSet" id="SoftwareToolsGroup" />
+				<Strings>
+					<ButtonText>View summary</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidSoftwareCoPackageCmdSet" id="cmdidSoftwareLaunchCommand" priority="0x0200" type="Button">
+				<Parent guid="guidSoftwareCoPackageCmdSet" id="SoftwareToolsGroup" />
+				<Strings>
+					<ButtonText>More data at Software.com</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidSoftwareCoPackageCmdSet" id="cmdidSoftwareToggleStatusInfoCommand" priority="0x0300" type="Button">
+				<Parent guid="guidSoftwareCoPackageCmdSet" id="SoftwareToolsGroup" />
+				<Strings>
+					<ButtonText>Show/hide status bar metrics</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidSoftwareCoPackageCmdSet" id="cmdidSoftwareOpenCodetimeTreeCommand" priority="0x0400" type="Button">
+				<Parent guid="guidSoftwareCoPackageCmdSet" id="SoftwareToolsGroup" />
 				<Strings>
 					<ButtonText>Code Time explorer</ButtonText>
 				</Strings>
@@ -76,12 +100,16 @@
 
 	<Symbols>
 		<!-- This is the package guid. -->
-		<GuidSymbol name="guidCodeTime" value="{0ae38c4e-1ac5-4457-bdca-bb2dfc342a1c}" />
+		<GuidSymbol name="guidSoftwareCoPackage" value="{f8cb9ea8-4214-42d8-8b7f-5d6e6c5cf50e}" />
 
 		<!-- This is the guid used to group the menu commands together -->
-		<GuidSymbol name="guidCodeTimeCmdSet" value="{76eda5aa-cf64-4fb5-9d52-06c48a00adbd}">
-			<IDSymbol name="CodeTimeGroup" value="0x1020" />
-			<IDSymbol name="cmdidTreeViewCommand" value="4135" />
+		<GuidSymbol name="guidSoftwareCoPackageCmdSet" value="{4c763fee-fc36-4e54-a1a5-09e3872f5fa5}">
+			<IDSymbol name="SoftwareToolsGroup" value="0x1020" />
+			<IDSymbol name="cmdidSoftwareSettingsLaunchCommand" value="1000" />
+			<IDSymbol name="cmdidSoftwareLaunchCommand" value="2000" />
+			<IDSymbol name="cmdidSoftwareDashboardLaunchCommand" value="3000" />
+			<IDSymbol name="cmdidSoftwareToggleStatusInfoCommand" value="4000" />
+			<IDSymbol name="cmdidSoftwareOpenCodetimeTreeCommand" value="5000" />
 		</GuidSymbol>
 
 		<GuidSymbol name="guidImages" value="{54614706-87de-4c00-b8f5-888955b7804d}">

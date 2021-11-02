@@ -13,7 +13,7 @@ namespace CodeTime
     class PackageManager
     {
         private static CodeTimePackage package;
-        private static CodeMetricsToolPane _codeMetricsWindow;
+        private static CodeTimeExplorer _codeMetricsWindow;
         private static StatusBarManager _statusBarButton;
         private static bool _addedStatusBarButton = false;
         private static string _solutionDirectory = "";
@@ -41,7 +41,7 @@ namespace CodeTime
             try
             {
                 await package.JoinableTaskFactory.SwitchToMainThreadAsync();
-                _codeMetricsWindow = (CodeMetricsToolPane)package.FindToolWindow(typeof(CodeMetricsToolPane), 0, true);
+                _codeMetricsWindow = (CodeTimeExplorer)package.FindToolWindow(typeof(CodeTimeExplorer), 0, true);
                 if (_codeMetricsWindow != null && _codeMetricsWindow.Frame != null)
                 {
                     _codeMetricsWindow.RebuildTree();
@@ -61,7 +61,7 @@ namespace CodeTime
             try
             {
                 await package.JoinableTaskFactory.SwitchToMainThreadAsync();
-                _codeMetricsWindow = (CodeMetricsToolPane)package.FindToolWindow(typeof(CodeMetricsToolPane), 0, true);
+                _codeMetricsWindow = (CodeTimeExplorer)package.FindToolWindow(typeof(CodeTimeExplorer), 0, true);
                 if (_codeMetricsWindow != null && _codeMetricsWindow.Frame != null)
                 {
                     _codeMetricsWindow.RebuildFlowButtons();
@@ -81,7 +81,7 @@ namespace CodeTime
             try
             {
                 await package.JoinableTaskFactory.SwitchToMainThreadAsync();
-                ToolWindowPane window = package.FindToolWindow(typeof(CodeMetricsToolPane), 0, true);
+                ToolWindowPane window = package.FindToolWindow(typeof(CodeTimeExplorer), 0, true);
                 if (window != null && window.Frame != null)
                 {
                     IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
@@ -102,7 +102,7 @@ namespace CodeTime
             try
             {
                 await package.JoinableTaskFactory.SwitchToMainThreadAsync();
-                _codeMetricsWindow = (CodeMetricsToolPane)package.FindToolWindow(typeof(CodeMetricsToolPane), 0, true);
+                _codeMetricsWindow = (CodeTimeExplorer)package.FindToolWindow(typeof(CodeTimeExplorer), 0, true);
                 if (_codeMetricsWindow != null && _codeMetricsWindow.Frame != null)
                 {
                     _codeMetricsWindow.ToggleClickHandler();

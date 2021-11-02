@@ -29,8 +29,8 @@ namespace CodeTime
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(CodeTimePackage.PackageGuidString)]
     [ProvideAutoLoad(UIContextGuids.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
-    [ProvideToolWindow(typeof(CodeMetricsToolPane), Window = ToolWindowGuids.SolutionExplorer, MultiInstances = false)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideToolWindow(typeof(CodeTimeExplorer), Window = ToolWindowGuids.SolutionExplorer, MultiInstances = false, Style = VsDockStyle.Tabbed)]
     public sealed class CodeTimePackage : AsyncPackage
     {
         /// <summary>
@@ -78,6 +78,8 @@ namespace CodeTime
             package = this;
             PackageManager.initialize(package, ObjDte);
             _ = Task.Delay(10000).ContinueWith((task) => { CheckSolutionActivation(); });
+            await CodeTimeExplorerCommand.InitializeAsync(this);
+            await CodeTimeSettingsCommand.InitializeAsync(this);
         }
 
         public async void CheckSolutionActivation()
@@ -90,12 +92,12 @@ namespace CodeTime
                 if (string.IsNullOrEmpty(solutionDir))
                 {
                     // no solution, try again later
-                    _ = System.Threading.Tasks.Task.Delay(8000).ContinueWith((task) => { CheckSolutionActivation(); });
+                    _ = Task.Delay(8000).ContinueWith((task) => { CheckSolutionActivation(); });
                 }
                 else
                 {
                     // solution is activated or it's empty, initialize
-                    _ = System.Threading.Tasks.Task.Delay(1000).ContinueWith((task) => { InitializePlugin(); });
+                    _ = Task.Delay(1000).ContinueWith((task) => { InitializePlugin(); });
                 }
             }
         }
@@ -103,8 +105,6 @@ namespace CodeTime
         private void InitializePlugin()
         {
             _ = PackageManager.InitializeStatusBar();
-
-            _ = TreeViewCommand.InitializeAsync(this);
 
             initialized = true;
         }
@@ -120,7 +120,7 @@ namespace CodeTime
             try
             {
                 await package.JoinableTaskFactory.SwitchToMainThreadAsync();
-                ToolWindowPane window = package.FindToolWindow(typeof(CodeMetricsToolPane), 0, true);
+                ToolWindowPane window = package.FindToolWindow(typeof(CodeTimeExplorer), 0, true);
                 if (window != null && window.Frame != null)
                 {
                     IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
