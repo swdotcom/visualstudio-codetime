@@ -9,7 +9,6 @@ namespace CodeTime
 {
     class FileManager
     {
-
         public static string getVSReadmeFile()
         {
             return getSoftwareDataDir(true) + "\\VS_README.txt";
@@ -179,17 +178,26 @@ namespace CodeTime
 
         public static void setBoolItem(string key, bool val)
         {
-            SaveSessionItem(key, val);
+            JObject o = GetSessionJson();
+            o[key] = val;
+
+            File.WriteAllText(getSoftwareSessionFile(), JsonConvert.SerializeObject(o), Encoding.UTF8);
         }
 
         public static void setNumericItem(string key, long val)
         {
-            SaveSessionItem(key, val);
+            JObject o = GetSessionJson();
+            o[key] = val;
+
+            File.WriteAllText(getSoftwareSessionFile(), JsonConvert.SerializeObject(o), Encoding.UTF8);
         }
 
         public static void setItem(string key, string val)
         {
-            SaveSessionItem(key, val);
+            JObject o = GetSessionJson();
+            o[key] = val;
+
+            File.WriteAllText(getSoftwareSessionFile(), JsonConvert.SerializeObject(o), Encoding.UTF8);
         }
 
         private static JObject GetSessionJson()
@@ -204,16 +212,6 @@ namespace CodeTime
                 }
                 return o;
             }
-        }
-
-        public static void SaveSessionItem(string key, object val)
-        {
-            string sessionFile = getSoftwareSessionFile();
-
-            JObject o = GetSessionJson();
-            o.Add(key, (JToken)val);
-
-            File.WriteAllText(sessionFile, JsonConvert.SerializeObject(o), Encoding.UTF8);
         }
 
         public static string getPluginUuid()
@@ -349,7 +347,7 @@ namespace CodeTime
             string deviceFile = getDeviceFile();
 
             JObject o = GetSessionJson();
-            o.Add(key, (JToken)value);
+            o[key] = value;
 
             File.WriteAllText(deviceFile, JsonConvert.SerializeObject(o), Encoding.UTF8);
         }
@@ -359,7 +357,7 @@ namespace CodeTime
             using (StreamReader reader = File.OpenText(getFlowChangeFile()))
             {
                 JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
-                if (o != null)
+                if (o == null)
                 {
                     return new JObject();
                 } else
@@ -395,12 +393,12 @@ namespace CodeTime
             return false;
         }
 
-        public static void UpdateFlowChange(object val)
+        public static void UpdateFlowChange(bool val)
         {
             string flowChangeFile = getFlowChangeFile();
 
             JObject o = GetFlowChangeData();
-            o.Add("in_flow", (JToken)val);
+            o["in_flow"] = val;
 
             File.WriteAllText(flowChangeFile, JsonConvert.SerializeObject(o), Encoding.UTF8);
         }

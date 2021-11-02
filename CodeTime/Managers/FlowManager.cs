@@ -2,19 +2,14 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace CodeTime
 {
     public sealed class FlowManager
     {
-        private static readonly Lazy<FlowManager> lazy = new Lazy<FlowManager>(() => new FlowManager());
-        public static FlowManager Instance { get { return lazy.Value; } }
 
-        private FlowManager()
-        {
-        }
-
-        public async void init()
+        public static async Task init()
         {
             HttpResponseMessage response = await HttpManager.MetricsRequest(HttpMethod.Get, "/v1/flow_sessions", null);
             if (HttpManager.IsOk(response))
@@ -39,10 +34,11 @@ namespace CodeTime
             {
                 JObject jsonObj = new JObject();
                 jsonObj.Add("automated", automated);
-                await HttpManager.AppRequest(HttpMethod.Post, "/v1/flow_sessions", jsonObj.ToString());
+                // await HttpManager.AppRequest(HttpMethod.Post, "/plugin/flow_sessions", jsonObj.ToString());
+                await HttpManager.MetricsRequest(HttpMethod.Post, "/v1/flow_sessions", jsonObj.ToString());
                 FileManager.UpdateFlowChange(true);
             }
-
+            _ = SessionSummaryManager.UpdateStatusBarWithSummaryDataAsync(null);
             _ = PackageManager.RebuildTreeAsync();
         }
 
@@ -50,10 +46,11 @@ namespace CodeTime
         {
             if (FileManager.IsInFlow())
             {
-                await HttpManager.AppRequest(HttpMethod.Delete, "/v1/flow_sessions", null);
+                // await HttpManager.AppRequest(HttpMethod.Delete, "/plugin/flow_sessions", null);
+                await HttpManager.MetricsRequest(HttpMethod.Delete, "/v1/flow_sessions", null);
                 FileManager.UpdateFlowChange(false);
             }
-
+            _ = SessionSummaryManager.UpdateStatusBarWithSummaryDataAsync(null);
             _ = PackageManager.RebuildTreeAsync();
         }
 

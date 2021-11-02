@@ -27,7 +27,6 @@ C:\Users\Software\visualstudio-codetime\CodeTime\obj\Debug\VSCT.read.1.tlog
 C:\Users\Software\visualstudio-codetime\CodeTime\obj\Debug\VSCT.write.1.tlog
 C:\Users\Software\visualstudio-codetime\CodeTime\obj\Debug\resources.json
 C:\Users\Software\visualstudio-codetime\CodeTime\obj\Debug\ctoFiles.json
-C:\Users\Software\visualstudio-codetime\CodeTime\obj\Debug\_EmptyResource.resources.original
 C:\Users\Software\visualstudio-codetime\CodeTime\obj\Debug\mergeCto.cache
 C:\Users\Software\visualstudio-codetime\CodeTime\obj\Debug\CodeTime.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Software\visualstudio-codetime\CodeTime\obj\Debug\CodeTime.csproj.CoreCompileInputs.cache

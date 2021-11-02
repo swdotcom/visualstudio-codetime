@@ -87,7 +87,7 @@ namespace CodeTime
             ThreadHelper.ThrowIfNotOnUIThread();
             StatusBarManager.showingStatusbarMetrics = !StatusBarManager.showingStatusbarMetrics;
             _ = PackageManager.RebuildTreeAccountAsync();
-            _ = SessionSummaryManager.Instance.UpdateStatusBarWithSummaryDataAsync();
+            _ = SessionSummaryManager.UpdateStatusBarWithSummaryDataAsync(null);
         }
     }
 }

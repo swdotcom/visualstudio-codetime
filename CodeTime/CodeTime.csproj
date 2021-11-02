@@ -195,6 +195,8 @@
     <VSCTCompile Include="CodeTimePackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
+    <Resource Include="Assets\readme.png" />
+    <Resource Include="Assets\settings.png" />
     <Content Include="cody-thumbs-up-blue.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

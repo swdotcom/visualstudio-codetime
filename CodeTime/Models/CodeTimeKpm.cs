@@ -99,7 +99,6 @@ namespace CodeTime
                 project.identifier = resourceInfo.identifier;
             }
 
-            SessionSummaryManager summaryMgr = SessionSummaryManager.Instance;
             NowTime nowTime = TimeUtil.GetNowTime();
             this.end = nowTime.now;
             this.local_end = nowTime.local_now;

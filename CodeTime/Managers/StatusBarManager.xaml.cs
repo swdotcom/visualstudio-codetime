@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -68,7 +69,37 @@ namespace CodeTime
 
                 TimeIcon.Source = statusImg.Source;
                 TimeIcon.ToolTip = tooltip;
+
+                if (FileManager.IsInFlow())
+                {
+                    string msg = "Exit Flow";
+                    Image dotImg = ImageManager.CreateImage("dot.png");
+                    FlowModeLabel.ToolTip = msg;
+                    FlowModeIcon.Source = dotImg.Source;
+                    FlowModeIcon.ToolTip = msg;
+                }
+                else
+                {
+                    string msg = "Enter Flow";
+                    Image dotOutlinedImg = ImageManager.CreateImage("dot-outlined.png");
+                    FlowModeLabel.ToolTip = msg;
+                    FlowModeIcon.Source = dotOutlinedImg.Source;
+                    FlowModeIcon.ToolTip = msg;
+                }
+
             }));
+        }
+
+        private void ToggleFlowMode(object sender, RoutedEventArgs args)
+        {
+            if (FileManager.IsInFlow())
+            {
+                FlowManager.DisableFlow();
+            }
+            else
+            {
+                FlowManager.EnableFlow(false);
+            }
         }
 
         private void LaunchCodeMetricsView(object sender, RoutedEventArgs args)
@@ -76,14 +107,6 @@ namespace CodeTime
             try
             {
                 _ = CodeTimePackage.OpenCodeMetricsPaneAsync();
-
-                UIElementEntity entity = new UIElementEntity();
-                entity.color = null;
-                entity.element_location = "ct_menu_tree";
-                entity.element_name = "ct_status_bar_metrics_btn";
-                entity.cta_text = "status bar metrics";
-                entity.icon_name = "clock";
-                TrackerEventManager.TrackUIInteractionEvent(UIInteractionType.click, entity);
             }
             catch (Exception e)
             {

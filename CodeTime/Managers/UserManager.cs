@@ -44,64 +44,51 @@ namespace CodeTime
             }
             return user;
         }
-        public static async Task<string> CreateAnonymousUserAsync(bool ignoreJwt)
+        public static async Task InitializeAnonIfNullSessionToken()
         {
-            // get the app jwt
-            try
+            string jwt = FileManager.getItemAsString("jwt");
+            if (string.IsNullOrEmpty(jwt))
             {
-                string jwt = FileManager.getItemAsString("jwt");
-                if (string.IsNullOrEmpty(jwt))
+                string plugin_uuid = FileManager.getPluginUuid();
+                string auth_callback_state = FileManager.getAuthCallbackState(true);
+                string osUsername = Environment.UserName;
+                string timezone = "";
+                if (TimeZone.CurrentTimeZone.DaylightName != null
+                    && TimeZone.CurrentTimeZone.DaylightName != TimeZone.CurrentTimeZone.StandardName)
                 {
-                    string plugin_uuid = FileManager.getPluginUuid();
-                    string auth_callback_state = FileManager.getAuthCallbackState(true);
-                    string osUsername = Environment.UserName;
-                    string timezone = "";
-                    if (TimeZone.CurrentTimeZone.DaylightName != null
-                        && TimeZone.CurrentTimeZone.DaylightName != TimeZone.CurrentTimeZone.StandardName)
+                    timezone = TimeZone.CurrentTimeZone.DaylightName;
+                }
+                else
+                {
+                    timezone = TimeZone.CurrentTimeZone.StandardName;
+                }
+
+                JObject jsonObj = new JObject();
+                jsonObj.Add("timezone", timezone);
+                jsonObj.Add("username", osUsername);
+                jsonObj.Add("hostname", EnvUtil.getHostname());
+                jsonObj.Add("plugin_uuid", plugin_uuid);
+                jsonObj.Add("auth_callback_state", auth_callback_state);
+
+                string api = "/plugins/onboard";
+                string jsonData = jsonObj.ToString();
+                HttpResponseMessage response = await HttpManager.MetricsRequest(HttpMethod.Post, api, jsonData);
+
+                if (HttpManager.IsOk(response))
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    IDictionary<string, object> respObj = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody);
+                    respObj.TryGetValue("jwt", out object jwtObj);
+                    jwt = (jwtObj == null) ? null : Convert.ToString(jwtObj);
+                    if (jwt != null)
                     {
-                        timezone = TimeZone.CurrentTimeZone.DaylightName;
-                    }
-                    else
-                    {
-                        timezone = TimeZone.CurrentTimeZone.StandardName;
-                    }
-
-                    JObject jsonObj = new JObject();
-                    jsonObj.Add("timezone", timezone);
-                    jsonObj.Add("username", osUsername);
-                    jsonObj.Add("hostname", EnvUtil.getHostname());
-                    jsonObj.Add("plugin_uuid", plugin_uuid);
-                    jsonObj.Add("auth_callback_state", auth_callback_state);
-
-                    string api = "/plugins/onboard";
-                    string jsonData = jsonObj.ToString();
-                    HttpResponseMessage response = await HttpManager.MetricsRequest(HttpMethod.Post, api, jsonData);
-
-                    if (HttpManager.IsOk(response))
-                    {
-                        string responseBody = await response.Content.ReadAsStringAsync();
-
-                        IDictionary<string, object> respObj = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody);
-                        respObj.TryGetValue("jwt", out object jwtObj);
-                        jwt = (jwtObj == null) ? null : Convert.ToString(jwtObj);
-                        if (jwt != null)
-                        {
-                            FileManager.setItem("jwt", jwt);
-                            FileManager.setBoolItem("switching_account", false);
-                            FileManager.setAuthCallbackState(null);
-                            return jwt;
-                        }
+                        FileManager.setItem("jwt", jwt);
+                        FileManager.setBoolItem("switching_account", false);
+                        FileManager.setAuthCallbackState(null);
                     }
                 }
             }
-            catch (Exception ex)
-            {
-
-                LogManager.Error("CreateAnonymousUserAsync, error: " + ex.Message, ex);
-            }
-
-
-            return null;
         }
 
         private static async Task<PluginStateInfo> GetPluginStateInfoFromResponseAsync(HttpResponseMessage response)
@@ -202,7 +189,7 @@ namespace CodeTime
                     FileManager.setAuthCallbackState(null);
 
                     // clear the time data summary and session summary
-                    SessionSummaryManager.Instance.ÇlearSessionSummaryData();
+                    SessionSummaryManager.ÇlearSessionSummaryData();
 
                     // clear the integrations
                     FileManager.syncIntegrations(user.integration_connections);

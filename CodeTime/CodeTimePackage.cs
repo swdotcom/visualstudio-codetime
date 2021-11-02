@@ -105,9 +105,15 @@ namespace CodeTime
             }
         }
 
-        private void InitializePlugin()
+        private async void InitializePlugin()
         {
+            await UserManager.InitializeAnonIfNullSessionToken();
+
             _ = PackageManager.InitializeStatusBar();
+
+            _ = SessionSummaryManager.UpdateSessionSummaryFromServerAsync();
+
+            _ = FlowManager.init();
 
             initialized = true;
         }

@@ -16,7 +16,7 @@ namespace CodeTime
             BitmapImage bi = new BitmapImage();
             // BitmapImage.UriSource must be in a BeginInit/EndInit block.
             bi.BeginInit();
-            bi.UriSource = new Uri(@"../Resources/" + iconName, UriKind.RelativeOrAbsolute);
+            bi.UriSource = new Uri(@"../Assets/" + iconName, UriKind.RelativeOrAbsolute);
             bi.EndInit();
             // Set the image source.
             image.Source = bi;

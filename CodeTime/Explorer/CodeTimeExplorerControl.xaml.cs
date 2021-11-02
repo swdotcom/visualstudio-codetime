@@ -61,7 +61,7 @@ namespace CodeTime
             AccountPanel.Children.Add(BuildClickLabel("LearnMorePanel", "readme.png", "Documentation", LearnMoreClickHandler));
 
             // Feedback label
-            AccountPanel.Children.Add(BuildClickLabel("SubmitIssuePanel", "message.png", "Submit an issue", FeedbackClickHandler));
+            AccountPanel.Children.Add(BuildClickLabel("SubmitIssuePanel", "message.png", "Submit an issue", SubmitIssueClickHandler));
 
             // Toggle status label
             string toggleStatusLabel = "Hide status bar metrics";
@@ -108,7 +108,7 @@ namespace CodeTime
             StatsPanel.Children.Clear();
 
             // settings button
-            StatsPanel.Children.Add(BuildClickLabel("DashboardPanel", "files.png", "Settings", SettingsClickHandler));
+            StatsPanel.Children.Add(BuildClickLabel("DashboardPanel", "settings.png", "Settings", SettingsClickHandler));
 
             // dashboard button
             StatsPanel.Children.Add(BuildClickLabel("DashboardPanel", "dashboard.png", "Dashboard Summary", DashboardClickHandler));
@@ -268,7 +268,7 @@ namespace CodeTime
         {
             StatusBarManager.showingStatusbarMetrics = !StatusBarManager.showingStatusbarMetrics;
             _ = RebuildAccountButtons();
-            _ = SessionSummaryManager.Instance.UpdateStatusBarWithSummaryDataAsync();
+            _ = SessionSummaryManager.UpdateStatusBarWithSummaryDataAsync(null);
         }
 
         public void AddWorkspaceClickHandler(object sender, MouseButtonEventArgs args)
@@ -281,9 +281,9 @@ namespace CodeTime
             LaunchUtil.launchReadme();
         }
 
-        private void FeedbackClickHandler(object sender, MouseButtonEventArgs args)
+        private void SubmitIssueClickHandler(object sender, MouseButtonEventArgs args)
         {
-            LaunchUtil.launchMailToCody();
+            LaunchUtil.launchSubmitIssue();
         }
 
         private void RemoveWorkspaceClickHandler(object sender, MouseButtonEventArgs args)

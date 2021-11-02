@@ -25,6 +25,11 @@ namespace CodeTime
             Process.Start("https://www.github.com/swdotcom/swdc-visualstudio");
         }
 
+        public static void launchSubmitIssue()
+        {
+            Process.Start("https://www.github.com/swdotcom/swdc-visualstudio/issues");
+        }
+
         public static void launchSettings()
         {
             Process.Start(Constants.app_endpoint + "/preferences");

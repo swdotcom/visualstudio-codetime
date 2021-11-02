@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
@@ -9,32 +10,13 @@ namespace CodeTime
 {
     public sealed class SessionSummaryManager
     {
-        private static readonly Lazy<SessionSummaryManager> lazy = new Lazy<SessionSummaryManager>(() => new SessionSummaryManager());
 
-        private SessionSummary _sessionSummary;
-
-        public static SessionSummaryManager Instance { get { return lazy.Value; } }
-
-        private SessionSummaryManager()
+        public static void ÇlearSessionSummaryData()
         {
+            SaveSessionSummaryToDisk(new SessionSummary());
         }
 
-        public void ÇlearSessionSummaryData()
-        {
-            _sessionSummary = new SessionSummary();
-            SaveSessionSummaryToDisk(_sessionSummary);
-        }
-
-        private async Task<SessionSummaryResult> GetSessionSummaryStatusAsync()
-        {
-            SessionSummaryResult sessionSummaryResult = new SessionSummaryResult();
-            _sessionSummary = FileManager.getSessionSummaryFileData();
-            sessionSummaryResult.sessionSummary = _sessionSummary;
-            sessionSummaryResult.status = "OK";
-            return sessionSummaryResult;
-        }
-
-        public void SaveSessionSummaryToDisk(SessionSummary sessionSummary)
+        public static void SaveSessionSummaryToDisk(SessionSummary sessionSummary)
         {
             string sessionSummaryFile = FileManager.getSessionSummaryFile();
 
@@ -54,15 +36,33 @@ namespace CodeTime
 
         }
 
-        public async Task UpdateStatusBarWithSummaryDataAsync()
+        public static async Task UpdateSessionSummaryFromServerAsync()
         {
-            _sessionSummary = FileManager.getSessionSummaryFileData();
-            long averageDailyMinutesVal = _sessionSummary.averageDailyMinutes;
+            string api = "/sessions/summary";
+            HttpResponseMessage response = await HttpManager.MetricsRequest(HttpMethod.Get, api);
+            if (HttpManager.IsOk(response))
+            {
+                string responseBody = await response.Content.ReadAsStringAsync();
+                SessionSummary summary = JsonConvert.DeserializeObject<SessionSummary>(responseBody);
+                _ = UpdateStatusBarWithSummaryDataAsync(summary);
+            } else
+            {
+                _ = UpdateStatusBarWithSummaryDataAsync(null);
+            }
+        }
 
-            string currentDayMinutesTime = FormatUtil.HumanizeMinutes(_sessionSummary.currentDayMinutes);
+        public static async Task UpdateStatusBarWithSummaryDataAsync(SessionSummary summary)
+        {
+            if (summary == null)
+            {
+                summary = FileManager.getSessionSummaryFileData();
+            }
+            long averageDailyMinutesVal = summary.averageDailyMinutes;
+
+            string currentDayMinutesTime = FormatUtil.HumanizeMinutes(summary.currentDayMinutes);
 
             // Code time today:  4 hrs | Avg: 3 hrs 28 min
-            string iconName = _sessionSummary.currentDayMinutes > averageDailyMinutesVal ? "rocket.png" : "cpaw.png";
+            string iconName = summary.currentDayMinutes > averageDailyMinutesVal ? "rocket.png" : "cpaw.png";
 
             // it's ok not to await on this
             PackageManager.UpdateStatusBarButtonText(currentDayMinutesTime, iconName);
