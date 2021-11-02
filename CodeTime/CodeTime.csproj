@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{CF6C9B2F-A27F-47A8-B04A-68305885D54A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CodeTime</RootNamespace>
+    <AssemblyName>CodeTime</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <GeneratePkgDefFile>true</GeneratePkgDefFile>
+    <UseCodebase>true</UseCodebase>
+    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
+    <StartAction>Program</StartAction>
+    <StartProgram Condition="'$(DevEnvDir)' != ''">$(DevEnvDir)devenv.exe</StartProgram>
+    <StartArguments>/rootsuffix Exp</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Managers\DocEventManager.cs" />
+    <Compile Include="Managers\FileInfoManager.cs" />
+    <Compile Include="Managers\FileManager.cs" />
+    <Compile Include="Managers\FlowManager.cs" />
+    <Compile Include="Managers\GitUtilManager.cs" />
+    <Compile Include="Managers\ImageManager.cs" />
+    <Compile Include="Managers\LogManager.cs" />
+    <Compile Include="Managers\HttpManager.cs" />
+    <Compile Include="Managers\PackageManager.cs" />
+    <Compile Include="Managers\SessionSummaryManager.cs" />
+    <Compile Include="Managers\StatusBarManager.xaml.cs">
+      <DependentUpon>StatusBarManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Managers\TrackerEventManager.cs" />
+    <Compile Include="Managers\UserManager.cs" />
+    <Compile Include="Models\CacheValue.cs" />
+    <Compile Include="Models\CodeTimeKpm.cs" />
+    <Compile Include="Models\CodeTimeKpmMetrics.cs" />
+    <Compile Include="Models\CodeTimeProject.cs" />
+    <Compile Include="Models\CommitChangeStats.cs" />
+    <Compile Include="Models\CommitInfo.cs" />
+    <Compile Include="Models\FileDetails.cs" />
+    <Compile Include="Models\FileInfoSummary.cs" />
+    <Compile Include="Models\IntegrationConnection.cs" />
+    <Compile Include="Models\IntegrationType.cs" />
+    <Compile Include="Models\NowTime.cs" />
+    <Compile Include="Models\PluginStateInfo.cs" />
+    <Compile Include="Models\RepoMember.cs" />
+    <Compile Include="Models\RepoResourceInfo.cs" />
+    <Compile Include="Models\SessionSummary.cs" />
+    <Compile Include="Models\SoftwareUser.cs" />
+    <Compile Include="Models\UserEncryptedData.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CodeTimePackage.cs" />
+    <Compile Include="Snowplow\Client\Http.cs" />
+    <Compile Include="Snowplow\Client\Response.cs" />
+    <Compile Include="Snowplow\Entities\AuthItem.cs" />
+    <Compile Include="Snowplow\Entities\FileEntity.cs" />
+    <Compile Include="Snowplow\Entities\PluginEntity.cs" />
+    <Compile Include="Snowplow\Entities\ProjectEntity.cs" />
+    <Compile Include="Snowplow\Entities\RepoEntity.cs" />
+    <Compile Include="Snowplow\Entities\UIElementEntity.cs" />
+    <Compile Include="Snowplow\Events\CodetimeEvent.cs" />
+    <Compile Include="Snowplow\Events\EditorActionEvent.cs" />
+    <Compile Include="Snowplow\Events\UIInteractionEvent.cs" />
+    <Compile Include="Snowplow\Events\UIInteractionType.cs" />
+    <Compile Include="Snowplow\Managers\CacheManager.cs" />
+    <Compile Include="Snowplow\Managers\HashManager.cs" />
+    <Compile Include="Snowplow\Managers\TrackerManager.cs" />
+    <Compile Include="Tree\CodeMetricsToolPane.cs" />
+    <Compile Include="Tree\CodeMetricsTree.xaml.cs">
+      <DependentUpon>CodeMetricsTree.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tree\CodeMetricsTreeItem.cs" />
+    <Compile Include="Tree\CodeMetricsTreeProvider.cs" />
+    <Compile Include="Tree\ProvideToolboxControlAttribute.cs" />
+    <Compile Include="Tree\SwitchAccountDialog.xaml.cs">
+      <DependentUpon>SwitchAccountDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\Constants.cs" />
+    <Compile Include="Utils\DictionaryUtil.cs" />
+    <Compile Include="Utils\EnvUtil.cs" />
+    <Compile Include="Utils\ExecUtil.cs" />
+    <Compile Include="Utils\FormatUtil.cs" />
+    <Compile Include="Utils\Guids.cs" />
+    <Compile Include="Utils\InputBox.cs" />
+    <Compile Include="Utils\LaunchUtil.cs" />
+    <Compile Include="Utils\Notification.cs" />
+    <Compile Include="Utils\TimeUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Konscious.Security.Cryptography.Blake2">
+      <Version>1.0.9</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.0-previews-4-31709-430" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5232" />
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Snowplow.Tracker">
+      <Version>1.1.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Managers\StatusBarManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tree\CodeMetricsTree.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tree\SwitchAccountDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
