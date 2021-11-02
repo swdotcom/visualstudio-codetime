@@ -243,13 +243,6 @@ namespace CodeTime
         private void LaunchWebDashboard(object sender, MouseButtonEventArgs args)
         {
             LaunchUtil.launchWebDashboard();
-            UIElementEntity entity = new UIElementEntity();
-            entity.color = "blue";
-            entity.element_location = "ct_menu_tree";
-            entity.element_name = "ct_web_metrics_btn";
-            entity.cta_text = "See rich data visualizations in the web app";
-            entity.icon_name = "paw";
-            TrackerEventManager.TrackUIInteractionEvent(UIInteractionType.click, entity);
         }
 
         private void ExitFlowModeHandler(object sender, MouseButtonEventArgs args)

@@ -1,8 +1,11 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
   <Metadata>
-    <Identity Id="CodeTime.310bbaca-5b45-4e77-a084-124f8840d4fd" Version="1.0" Language="en-US" Publisher="xavier" />
-    <DisplayName>CodeTime</DisplayName>
-    <Description>Empty VSIX Project.</Description>
+    <Identity Id="CodeTime.310bbaca-5b45-4e77-a084-124f8840d4fd" Version="2.6.0" Language="en-US" Publisher="Software.com" />
+    <DisplayName>Code Time</DisplayName>
+    <Description xml:space="preserve">Code Time provides insights into how you code</Description>
+    <License>LICENSE.txt</License>
+    <GettingStartedGuide>https://github.com/swdotcom/swdc-visualstudio</GettingStartedGuide>
+    <Icon>cody-thumbs-up-blue.png</Icon>
   </Metadata>
   <Installation InstalledByMsi="true">
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">

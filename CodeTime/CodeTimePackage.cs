@@ -28,6 +28,9 @@ namespace CodeTime
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(CodeTimePackage.PackageGuidString)]
+    [ProvideAutoLoad(UIContextGuids.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideToolWindow(typeof(CodeMetricsToolPane), Window = ToolWindowGuids.SolutionExplorer, MultiInstances = false)]
+    [ProvideMenuResource("Menus.ctmenu", 1)]
     public sealed class CodeTimePackage : AsyncPackage
     {
         /// <summary>
@@ -36,6 +39,8 @@ namespace CodeTime
         public const string PackageGuidString = "f8cb9ea8-4214-42d8-8b7f-5d6e6c5cf50e";
 
         private static CodeTimePackage package = null;
+        private static bool initialized = false;
+
         public static DTE ObjDte = null;
 
         private Events2 events;
@@ -61,21 +66,50 @@ namespace CodeTime
 
             // obtain the DTE service to track doc changes
             ObjDte = await GetServiceAsync(typeof(DTE)) as DTE;
-            events = (Events2)ObjDte.Events;
+            // events = (Events2)ObjDte.Events;
 
             // Intialize the document event handlers
-            _textEditorEvents = events.TextEditorEvents;
-            _textDocKeyEvents = events.TextDocumentKeyPressEvents;
-            _docEvents = events.DocumentEvents;
-            _windowVisibilityEvents = events.WindowVisibilityEvents;
+            // _textEditorEvents = events.TextEditorEvents;
+            // _textDocKeyEvents = events.TextDocumentKeyPressEvents;
+            // _docEvents = events.DocumentEvents;
+            // _windowVisibilityEvents = events.WindowVisibilityEvents;
 
             // init the package manager that will use the AsyncPackage to run main thread requests
-            PackageManager.initialize(this, ObjDte);
-
             package = this;
+            PackageManager.initialize(package, ObjDte);
+            _ = Task.Delay(10000).ContinueWith((task) => { CheckSolutionActivation(); });
         }
 
-        [STAThread]
+        public async void CheckSolutionActivation()
+        {
+            await this.JoinableTaskFactory.SwitchToMainThreadAsync();
+            if (!initialized)
+            {
+                // don't initialize the rest of the plugin until a project is loaded
+                string solutionDir = await PackageManager.GetSolutionDirectory();
+                if (string.IsNullOrEmpty(solutionDir))
+                {
+                    // no solution, try again later
+                    _ = System.Threading.Tasks.Task.Delay(8000).ContinueWith((task) => { CheckSolutionActivation(); });
+                }
+                else
+                {
+                    // solution is activated or it's empty, initialize
+                    _ = System.Threading.Tasks.Task.Delay(1000).ContinueWith((task) => { InitializePlugin(); });
+                }
+            }
+        }
+
+        private void InitializePlugin()
+        {
+            _ = PackageManager.InitializeStatusBar();
+
+            _ = TreeViewCommand.InitializeAsync(this);
+
+            initialized = true;
+        }
+
+            [STAThread]
         public static async Task OpenCodeMetricsPaneAsync()
         {
             if (package == null)

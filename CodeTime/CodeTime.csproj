@@ -45,6 +45,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\TreeViewCommand.cs" />
     <Compile Include="Managers\DocEventManager.cs" />
     <Compile Include="Managers\FileInfoManager.cs" />
     <Compile Include="Managers\FileManager.cs" />
@@ -127,6 +128,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
@@ -163,6 +165,41 @@
     </Page>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Assets\SoftwareDashboardLaunchCommand.png" />
+    <Resource Include="Assets\SoftwareLaunchCommand.png" />
+    <Resource Include="Assets\SoftwareLoginCommand.png" />
+    <Resource Include="Assets\SoftwareTopFortyCommand.png" />
+    <Resource Include="Assets\add.png" />
+    <Resource Include="Assets\clock.png" />
+    <Resource Include="Assets\cody-thumbs-up-blue.png" />
+    <Resource Include="Assets\cpaw.png" />
+    <Resource Include="Assets\dashboard.png" />
+    <Resource Include="Assets\deletion.png" />
+    <Resource Include="Assets\dot-outlined.png" />
+    <Resource Include="Assets\dot.png" />
+    <Resource Include="Assets\email.png" />
+    <Resource Include="Assets\envelope.png" />
+    <Resource Include="Assets\files.png" />
+    <Resource Include="Assets\github.png" />
+    <Resource Include="Assets\google.png" />
+    <Resource Include="Assets\message.png" />
+    <Resource Include="Assets\paw.png" />
+    <Resource Include="Assets\rocket.png" />
+    <Resource Include="Assets\visible.png" />
+    <VSCTCompile Include="CodeTimePackage.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <Content Include="cody-thumbs-up-blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="index.html" />
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
