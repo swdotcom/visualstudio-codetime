@@ -44,4 +44,3 @@ C:\Users\Software\visualstudio-codetime\CodeTime\bin\Debug\System.Threading.Chan
 C:\Users\Software\visualstudio-codetime\CodeTime\bin\Debug\System.Threading.Tasks.Extensions.dll
 C:\Users\Software\visualstudio-codetime\CodeTime\bin\Debug\System.ValueTuple.dll
 C:\Users\Software\visualstudio-codetime\CodeTime\bin\Debug\Websocket.Client.dll
-C:\Users\Software\visualstudio-codetime\CodeTime\obj\Debug\_EmptyResource.resources.original
