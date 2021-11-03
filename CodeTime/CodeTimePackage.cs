@@ -48,6 +48,9 @@ namespace CodeTime
         private TextEditorEvents _textEditorEvents;
         private TextDocumentKeyPressEvents _textDocKeyEvents;
         private WindowVisibilityEvents _windowVisibilityEvents;
+        private DocEventManager docEventMgr;
+
+        private int initCount = 0;
 
         #region Package Members
 
@@ -63,16 +66,35 @@ namespace CodeTime
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+            _ = PreCodeTimeInit();
+        }
+
+        private async Task PreCodeTimeInit() {
 
             // obtain the DTE service to track doc changes
             ObjDte = await GetServiceAsync(typeof(DTE)) as DTE;
-            // events = (Events2)ObjDte.Events;
+            if (ObjDte == null)
+            {
+                if (initCount < 2)
+                {
+                    initCount++;
+                    // try again
+                    _ = Task.Delay(5000).ContinueWith((task) => { PreCodeTimeInit(); });
+                }
+            } else
+            {
+                _ = CodeTimeInit();
+            }
+        }
+
+        private async Task CodeTimeInit() {
+            events = (Events2)ObjDte.Events;
 
             // Intialize the document event handlers
-            // _textEditorEvents = events.TextEditorEvents;
-            // _textDocKeyEvents = events.TextDocumentKeyPressEvents;
-            // _docEvents = events.DocumentEvents;
-            // _windowVisibilityEvents = events.WindowVisibilityEvents;
+            _textEditorEvents = events.TextEditorEvents;
+            _textDocKeyEvents = events.TextDocumentKeyPressEvents;
+            _docEvents = events.DocumentEvents;
+            _windowVisibilityEvents = events.WindowVisibilityEvents;
 
             // init the package manager that will use the AsyncPackage to run main thread requests
             package = this;
@@ -83,6 +105,8 @@ namespace CodeTime
             await CodeTimeSummaryCommand.InitializeAsync(this);
             await CodeTimeAppCommand.InitializeAsync(this);
             await CodeTimeToggleStatusCommand.InitializeAsync(this);
+
+            LogManager.Info(string.Format("Initialized Code Time v{0}", EnvUtil.GetVersion()));
         }
 
         public async void CheckSolutionActivation()
@@ -94,7 +118,7 @@ namespace CodeTime
                 string solutionDir = await PackageManager.GetSolutionDirectory();
                 if (string.IsNullOrEmpty(solutionDir))
                 {
-                    // no solution, try again later
+                    // no solution, try again
                     _ = Task.Delay(8000).ContinueWith((task) => { CheckSolutionActivation(); });
                 }
                 else
@@ -115,10 +139,27 @@ namespace CodeTime
 
             _ = FlowManager.init();
 
+            _ = Task.Delay(1000).ContinueWith((task) => { InitializeDocListeners(); });
+
             initialized = true;
         }
 
-            [STAThread]
+        void InitializeDocListeners()
+        {
+            // setup event handlers
+            docEventMgr = DocEventManager.Instance;
+            _textDocKeyEvents.BeforeKeyPress += this.BeforeKeyPress;
+            _docEvents.DocumentClosing += docEventMgr.DocEventsOnDocumentClosedAsync;
+            _windowVisibilityEvents.WindowShowing += docEventMgr.WindowVisibilityEventAsync;
+            _textEditorEvents.LineChanged += docEventMgr.LineChangedAsync;
+        }
+
+        void BeforeKeyPress(string Keypress, TextSelection Selection, bool InStatementCompletion, ref bool CancelKeypress)
+        {
+            docEventMgr.BeforeKeyPressAsync(Keypress, Selection, InStatementCompletion, CancelKeypress);
+        }
+
+        [STAThread]
         public static async Task OpenCodeMetricsPaneAsync()
         {
             if (package == null)
