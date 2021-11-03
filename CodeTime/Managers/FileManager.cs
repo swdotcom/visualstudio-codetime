@@ -9,10 +9,6 @@ namespace CodeTime
 {
     class FileManager
     {
-        public static string getVSReadmeFile()
-        {
-            return getSoftwareDataDir(true) + "\\VS_README.txt";
-        }
 
         public static string getSoftwareDataDir(bool autoCreate)
         {
@@ -33,14 +29,7 @@ namespace CodeTime
 
         public static string GetSnowplowStorageFile()
         {
-            string file = getSoftwareDataDir(true) + "\\events.db";
-            return file;
-        }
-
-        public static bool softwareSessionFileExists()
-        {
-            string file = getSoftwareDataDir(false) + "\\session.json";
-            return File.Exists(file);
+            return getSoftwareDataDir(true) + "\\snowplow_events.db";
         }
 
         public static string getSessionSummaryFile()
@@ -87,11 +76,6 @@ namespace CodeTime
             return File.Exists(file);
         }
 
-        public static bool LogFileExists()
-        {
-            string file = getSoftwareDataDir(true) + "\\Log.txt";
-            return File.Exists(file);
-        }
         public static string getLogFile()
         {
             return getSoftwareDataDir(true) + "\\Log.txt";

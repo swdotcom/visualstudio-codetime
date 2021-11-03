@@ -5,10 +5,15 @@ namespace CodeTime
 {
     class TrackerEventManager
     {
-        private static TrackerManager tracker;
+        private static TrackerManager tracker = null;
 
         public static void init()
         {
+            if (tracker != null)
+            {
+                return;
+            }
+
             try
             {
                 tracker = new TrackerManager("CodeTime", "swdc-visualstudio");
@@ -35,46 +40,50 @@ namespace CodeTime
                 return;
             }
 
-            AuthEntity authEntity = GetAuthEntity();
-            PluginEntity pluginEntity = GetPluginEntity();
-
-            RepoEntity repoEntity = null;
-            foreach (CodeTimeKpmMetrics fileInfo in pluginData.source)
+            try
             {
-                CodetimeEvent codetimeEvent = new CodetimeEvent();
-                codetimeEvent.keystrokes = fileInfo.keystrokes;
-                codetimeEvent.lines_added = fileInfo.linesAdded;
-                codetimeEvent.lines_deleted = fileInfo.linesRemoved;
-                codetimeEvent.end_time = TimeUtil.ToRfc3339String(fileInfo.end);
-                codetimeEvent.start_time = TimeUtil.ToRfc3339String(fileInfo.start);
-                codetimeEvent.characters_added = fileInfo.characters_added;
-                codetimeEvent.characters_deleted = fileInfo.characters_deleted;
-                codetimeEvent.single_adds = fileInfo.single_adds;
-                codetimeEvent.multi_adds = fileInfo.multi_adds;
-                codetimeEvent.single_deletes = fileInfo.single_deletes;
-                codetimeEvent.multi_deletes = fileInfo.multi_deletes;
-                codetimeEvent.auto_indents = fileInfo.auto_indents;
-                codetimeEvent.replacements = fileInfo.replacements;
-                codetimeEvent.is_net_change = fileInfo.is_net_change;
+                AuthEntity authEntity = GetAuthEntity();
+                PluginEntity pluginEntity = GetPluginEntity();
 
-                // entities
-                codetimeEvent.pluginEntity = pluginEntity;
-                codetimeEvent.authEntity = authEntity;
-
-                codetimeEvent.fileEntity = await GetFileEntity(fileInfo.file);
-                codetimeEvent.projectEntity = await GetProjectEntity(fileInfo.file);
-
-
-                if (repoEntity == null)
+                RepoEntity repoEntity = null;
+                foreach (CodeTimeKpmMetrics fileInfo in pluginData.source)
                 {
-                    repoEntity = GetRepoEntity(codetimeEvent.projectEntity.project_directory);
+                    CodetimeEvent codetimeEvent = new CodetimeEvent();
+                    codetimeEvent.keystrokes = fileInfo.keystrokes;
+                    codetimeEvent.lines_added = fileInfo.linesAdded;
+                    codetimeEvent.lines_deleted = fileInfo.linesRemoved;
+                    codetimeEvent.end_time = TimeUtil.ToRfc3339String(fileInfo.end);
+                    codetimeEvent.start_time = TimeUtil.ToRfc3339String(fileInfo.start);
+                    codetimeEvent.characters_added = fileInfo.characters_added;
+                    codetimeEvent.characters_deleted = fileInfo.characters_deleted;
+                    codetimeEvent.single_adds = fileInfo.single_adds;
+                    codetimeEvent.multi_adds = fileInfo.multi_adds;
+                    codetimeEvent.single_deletes = fileInfo.single_deletes;
+                    codetimeEvent.multi_deletes = fileInfo.multi_deletes;
+                    codetimeEvent.auto_indents = fileInfo.auto_indents;
+                    codetimeEvent.replacements = fileInfo.replacements;
+                    codetimeEvent.is_net_change = fileInfo.is_net_change;
+
+                    // entities
+                    codetimeEvent.pluginEntity = pluginEntity;
+                    codetimeEvent.authEntity = authEntity;
+
+                    codetimeEvent.fileEntity = await GetFileEntity(fileInfo.file);
+                    codetimeEvent.projectEntity = await GetProjectEntity(fileInfo.file);
+
+
+                    if (repoEntity == null)
+                    {
+                        repoEntity = GetRepoEntity(codetimeEvent.projectEntity.project_directory);
+                    }
+
+                    codetimeEvent.repoEntity = repoEntity;
+
+                    tracker.TrackCodetimeEvent(codetimeEvent);
                 }
-
-                codetimeEvent.repoEntity = repoEntity;
-
-                Console.WriteLine($"CODE TIME EVENT: {codetimeEvent.ToString()}");
-
-                tracker.TrackCodetimeEvent(codetimeEvent);
+            } catch (Exception e)
+            {
+                LogManager.Error("Unable to process code time information", e);
             }
         }
 
@@ -152,7 +161,7 @@ namespace CodeTime
 
         public static RepoEntity GetRepoEntity(string projectDir)
         {
-            RepoResourceInfo info = GitUtilManager.GetResourceInfo(projectDir, false);
+            RepoResourceInfo info = GitUtilManager.GetResourceInfo(projectDir);
             RepoEntity repoEntity = new RepoEntity();
             repoEntity.git_branch = info.branch;
             repoEntity.git_tag = info.tag;

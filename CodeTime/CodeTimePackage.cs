@@ -119,7 +119,7 @@ namespace CodeTime
                 if (string.IsNullOrEmpty(solutionDir))
                 {
                     // no solution, try again
-                    _ = Task.Delay(8000).ContinueWith((task) => { CheckSolutionActivation(); });
+                    _ = Task.Delay(6000).ContinueWith((task) => { CheckSolutionActivation(); });
                 }
                 else
                 {
@@ -129,7 +129,7 @@ namespace CodeTime
             }
         }
 
-        private async void InitializePlugin()
+        private async Task InitializePlugin()
         {
             await UserManager.InitializeAnonIfNullSessionToken();
 
@@ -142,6 +142,8 @@ namespace CodeTime
             _ = Task.Delay(1000).ContinueWith((task) => { InitializeDocListeners(); });
 
             _ = UserManager.GetUser();
+
+           TrackerEventManager.init();
 
             initialized = true;
         }

@@ -14,7 +14,7 @@ namespace CodeTime
             name = nameVal;
             directory = directoryVal;
             // get the identifier
-            RepoResourceInfo resourceInfo = GitUtilManager.GetResourceInfo(directoryVal, false);
+            RepoResourceInfo resourceInfo = GitUtilManager.GetResourceInfo(directoryVal);
             if (resourceInfo != null && resourceInfo.identifier != null)
             {
                 identifier = resourceInfo.identifier;

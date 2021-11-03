@@ -188,7 +188,6 @@ namespace CodeTime
 
         private async void UpdateFileInfoMetrics(CodeTimeKpmMetrics fileInfo, TextPoint start, TextPoint end, string Keypress, TextSelection textSelection)
         {
-            long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             bool hasAutoIndent = false;
             bool newLineAutoIndent = false;
 
@@ -352,10 +351,6 @@ namespace CodeTime
             if (_pluginData != null && hasData())
             {
                 NowTime nowTime = TimeUtil.GetNowTime();
-                // create the aggregates, end the file times, gather the cumulatives
-                string softwareDataContent = await _pluginData.CompletePayloadAndReturnJsonString();
-
-                LogManager.Info("Code Time: processing plugin data: " + softwareDataContent);
 
                 _ = TrackerEventManager.TrackCodeTimeEventAsync(_pluginData);
 

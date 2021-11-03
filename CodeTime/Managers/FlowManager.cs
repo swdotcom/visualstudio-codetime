@@ -17,8 +17,9 @@ namespace CodeTime
                 try
                 {
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    JArray flowSessions = JsonConvert.DeserializeObject<JArray>(responseBody);
-                    bool inFlow = (flowSessions != null && flowSessions.Count > 0);
+                    JObject sessionInfo = JsonConvert.DeserializeObject<JObject>(responseBody);
+                    JArray flowSessions = (JArray)sessionInfo.GetValue("flow_sessions");
+                    bool inFlow = (flowSessions.Count > 0);
                     FileManager.UpdateFlowChange(inFlow);
                 }
                 catch (Exception e)

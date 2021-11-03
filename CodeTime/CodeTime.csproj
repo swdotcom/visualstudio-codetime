@@ -82,7 +82,6 @@
     <Compile Include="Models\IntegrationType.cs" />
     <Compile Include="Models\NowTime.cs" />
     <Compile Include="Models\PluginStateInfo.cs" />
-    <Compile Include="Models\RepoMember.cs" />
     <Compile Include="Models\RepoResourceInfo.cs" />
     <Compile Include="Models\SessionSummary.cs" />
     <Compile Include="Models\SoftwareUser.cs" />

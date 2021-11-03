@@ -86,12 +86,12 @@ namespace CodeTime
                 {
                     FileInfo fi = new FileInfo(projectDir);
                     project = new CodeTimeProject(fi.Name, projectDir);
-                    resourceInfo = GitUtilManager.GetResourceInfo(projectDir, false);
+                    resourceInfo = GitUtilManager.GetResourceInfo(projectDir);
                 }
             }
             else
             {
-                resourceInfo = GitUtilManager.GetResourceInfo(this.project.directory, false);
+                resourceInfo = GitUtilManager.GetResourceInfo(this.project.directory);
             }
 
             if (resourceInfo != null && resourceInfo.identifier != null && !resourceInfo.identifier.Equals(""))

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace CodeTime
@@ -7,7 +6,7 @@ namespace CodeTime
     public sealed class GitUtilManager
     {
 
-        public static RepoResourceInfo GetResourceInfo(string projectDir, bool includeMembers)
+        public static RepoResourceInfo GetResourceInfo(string projectDir)
         {
             if (!IsGitProject(projectDir))
             {
@@ -38,39 +37,6 @@ namespace CodeTime
                     if (tag != null && !tag.Equals(""))
                     {
                         info.tag = tag;
-                    }
-
-                    if (includeMembers)
-                    {
-                        List<RepoMember> repoMembers = new List<RepoMember>();
-                        string gitLogData = ExecUtil.GetFirstCommandResult("git log --pretty=%an,%ae | sort", projectDir);
-
-                        IDictionary<string, string> memberMap = new Dictionary<string, string>();
-
-                        if (gitLogData != null && !gitLogData.Equals(""))
-                        {
-                            string[] lines = gitLogData.Split(
-                                new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                            if (lines != null && lines.Length > 0)
-                            {
-                                for (int i = 0; i < lines.Length; i++)
-                                {
-                                    string line = lines[i];
-                                    string[] memberInfos = line.Split(',');
-                                    if (memberInfos != null && memberInfos.Length > 1)
-                                    {
-                                        string name = memberInfos[0].Trim();
-                                        string memberEmail = memberInfos[1].Trim();
-                                        if (!memberMap.ContainsKey(email))
-                                        {
-                                            memberMap.Add(email, name);
-                                            repoMembers.Add(new RepoMember(name, email));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        info.members = repoMembers;
                     }
                 }
 
