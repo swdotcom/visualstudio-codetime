@@ -135,11 +135,13 @@ namespace CodeTime
 
             _ = PackageManager.InitializeStatusBar();
 
-            _ = SessionSummaryManager.UpdateSessionSummaryFromServerAsync();
+            SessionSummaryManager.Initialize();
 
             _ = FlowManager.init();
 
             _ = Task.Delay(1000).ContinueWith((task) => { InitializeDocListeners(); });
+
+            _ = UserManager.GetUser();
 
             initialized = true;
         }

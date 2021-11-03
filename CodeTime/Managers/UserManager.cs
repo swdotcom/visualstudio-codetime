@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,9 +37,21 @@ namespace CodeTime
 
             if (HttpManager.IsOk(response))
             {
-                string responseBody = await response.Content.ReadAsStringAsync();
+                try
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    JObject jsonObj = JsonConvert.DeserializeObject<JObject>(responseBody);
 
-                user = JsonConvert.DeserializeObject<SoftwareUser>(responseBody);
+                    user = jsonObj.GetValue("data").ToObject<SoftwareUser>();
+
+                    FileManager.syncIntegrations(user.integration_connections);
+
+                    _ = PackageManager.RebuildTreeAsync();
+                }
+                catch (Exception ex)
+                {
+                    LogManager.Error("Error converting user info", ex);
+                }
             }
             return user;
         }
@@ -232,8 +243,9 @@ namespace CodeTime
         public static async void RefetchSlackConnectStatusLazily(int try_count)
         {
             slackConnectTryCount = try_count;
+            List<IntegrationConnection> existingConnections = FileManager.GetIntegrations();
             SoftwareUser user = await GetUser();
-            if (!HasNewIntegration(user))
+            if (!HasNewIntegration(user.integration_connections, existingConnections))
             {
                 if (slackConnectTryCount > 0)
                 {
@@ -259,42 +271,52 @@ namespace CodeTime
             }
         }
 
-        public static async void DisconnectSlackAuth(string authId)
+        public static async void DisconnectSlackAuth(string domain)
         {
-            IntegrationConnection foundIntegration = FileManager.GetIntegrations().Find(delegate (IntegrationConnection n) { return n.authId.Equals(authId); });
+            List<IntegrationConnection> connections = FileManager.GetIntegrations();
+
+            IntegrationConnection foundIntegration = null;
+            foreach (IntegrationConnection integrationConnection in connections)
+            {
+                if (integrationConnection.meta != null)
+                {
+                    IntegrationMeta meta = JsonConvert.DeserializeObject<IntegrationMeta>(integrationConnection.meta);
+                    if (meta.domain.Equals(domain))
+                    {
+                        foundIntegration = integrationConnection;
+                        break;
+                    }
+                }
+            }
+
             if (foundIntegration == null)
             {
                 LogManager.Warning("Unable to find slack workspace to disconnect");
             }
-            string msg = "Are you sure you would like to disconnect the '" + foundIntegration.team_domain + "' Slack workspace?";
+            string msg = "Are you sure you would like to disconnect the " + domain + " workspace?";
             DialogResult res = MessageBox.Show(msg, "Disconnect Slack", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-            if (res == DialogResult.Yes)
+            if (res == DialogResult.Yes && foundIntegration != null)
             {
-                string jwt = FileManager.getItemAsString("jwt");
-                JObject jsonObj = new JObject();
-                jsonObj.Add("authId", foundIntegration.authId);
-                HttpManager.MetricsRequest(HttpMethod.Put, "/auth/slack/disconnect", jsonObj.ToString());
-
-                SoftwareUser user = await GetUser();
-                FileManager.syncIntegrations(user.integration_connections);
-
-                PackageManager.RebuildTreeAsync();
+                HttpManager.MetricsRequest(HttpMethod.Delete, "/integrations/" + foundIntegration.id, null);
+                _ = GetUser();
             }
         }
 
-        public static bool HasNewIntegration(SoftwareUser user)
+        public static bool HasNewIntegration(List<IntegrationConnection> userIntegrations, List<IntegrationConnection> existingIntegrations)
         {
-            if (user != null)
+            if (existingIntegrations == null)
             {
-                List<IntegrationConnection> currentIntegrations = FileManager.GetIntegrations();
-                foreach (IntegrationConnection integration in user.integration_connections)
+                existingIntegrations = new List<IntegrationConnection>();
+            }
+            if (userIntegrations != null)
+            {
+                foreach (IntegrationConnection integration in userIntegrations)
                 {
-                    if (integration.name.ToLower().Equals("slack") && integration.status.ToLower().Equals("active"))
+                    if (integration.integration_type != null && integration.integration_type.type.ToLower().Equals("slack") && integration.status.ToLower().Equals("active"))
                     {
-                        IntegrationConnection foundIntegration = currentIntegrations.Find(delegate (IntegrationConnection n) { return n.authId.Equals(integration.authId); });
+                        IntegrationConnection foundIntegration = existingIntegrations.Find(delegate (IntegrationConnection n) { return n.authId.Equals(integration.authId); });
                         if (foundIntegration == null)
                         {
-                            FileManager.syncIntegrations(currentIntegrations);
                             return true;
                         }
                     }

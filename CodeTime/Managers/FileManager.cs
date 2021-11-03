@@ -284,7 +284,9 @@ namespace CodeTime
                     {
                         foreach (IntegrationConnection integrationConnection in integrationConnections)
                         {
-                            if (integrationConnection.name.Equals(type.ToLower()))
+                            if (integrationConnection.integration_type != null &&
+                                integrationConnection.integration_type.type.Equals(type.ToLower()) &&
+                                integrationConnection.status.ToLower().Equals("active"))
                             {
                                 integrations.Add(integrationConnection);
                             }
@@ -294,7 +296,7 @@ namespace CodeTime
             }
             catch (Exception e)
             {
-                LogManager.Warning("Error reading integrations file: " + e.Message);
+                LogManager.Error("Error reading integrations file", e);
             }
 
             return integrations;
@@ -302,9 +304,17 @@ namespace CodeTime
 
         public static void syncIntegrations(List<IntegrationConnection> integrations)
         {
+            List<IntegrationConnection> activeConnections = new List<IntegrationConnection> ();
+            foreach (IntegrationConnection integrationConnection in integrations)
+            {
+                if (integrationConnection.status.ToLower().Equals("active"))
+                {
+                    activeConnections.Add(integrationConnection);
+                }
+            }
             try
             {
-                string content = JsonConvert.SerializeObject(integrations);
+                string content = JsonConvert.SerializeObject(activeConnections);
                 File.WriteAllText(getIntegrationsFile(), content, Encoding.UTF8);
             }
             catch (Exception)

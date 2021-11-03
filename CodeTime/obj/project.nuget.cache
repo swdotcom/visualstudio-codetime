@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "VuXzx6Zw48WPsqil6HUpfCC5dZ2cA4c1eHROGTJlYNUwRBM7uXuwws0KmkVv9/uXkCW+lwqhMk21NNGYepFFBw==",
+  "dgSpecHash": "7FDhmufPi7IBjXPbeh1HJ40ecQCGiWd1h5nyzMmRs/eWn6/gzrtD7AM+bGiGr1Gd8AOGF3OURsCxr72dgRFzIQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Software\\visualstudio-codetime\\CodeTime\\CodeTime.csproj",
   "expectedPackageFiles": [
@@ -109,6 +109,7 @@
     "C:\\Users\\Software\\.nuget\\packages\\system.net.websockets\\4.3.0\\system.net.websockets.4.3.0.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\system.private.uri\\4.3.2\\system.private.uri.4.3.2.nupkg.sha512",
+    "C:\\Users\\Software\\.nuget\\packages\\system.reactive\\4.3.2\\system.reactive.4.3.2.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\system.reflection.emit.lightweight\\4.6.0\\system.reflection.emit.lightweight.4.6.0.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512",
@@ -120,8 +121,10 @@
     "C:\\Users\\Software\\.nuget\\packages\\system.security.cryptography.x509certificates\\4.3.0\\system.security.cryptography.x509certificates.4.3.0.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\system.threading.accesscontrol\\5.0.0\\system.threading.accesscontrol.5.0.0.nupkg.sha512",
+    "C:\\Users\\Software\\.nuget\\packages\\system.threading.channels\\4.7.0\\system.threading.channels.4.7.0.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\system.threading.tasks.dataflow\\5.0.0\\system.threading.tasks.dataflow.5.0.0.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
+    "C:\\Users\\Software\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\vslangproj\\17.0.0-previews-4-31709-430\\vslangproj.17.0.0-previews-4-31709-430.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\vslangproj100\\17.0.0-previews-4-31709-430\\vslangproj100.17.0.0-previews-4-31709-430.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\vslangproj110\\17.0.0-previews-4-31709-430\\vslangproj110.17.0.0-previews-4-31709-430.nupkg.sha512",
@@ -132,7 +135,8 @@
     "C:\\Users\\Software\\.nuget\\packages\\vslangproj165\\17.0.0-previews-4-31709-430\\vslangproj165.17.0.0-previews-4-31709-430.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\vslangproj2\\17.0.0-previews-4-31709-430\\vslangproj2.17.0.0-previews-4-31709-430.nupkg.sha512",
     "C:\\Users\\Software\\.nuget\\packages\\vslangproj80\\17.0.0-previews-4-31709-430\\vslangproj80.17.0.0-previews-4-31709-430.nupkg.sha512",
-    "C:\\Users\\Software\\.nuget\\packages\\vslangproj90\\17.0.0-previews-4-31709-430\\vslangproj90.17.0.0-previews-4-31709-430.nupkg.sha512"
+    "C:\\Users\\Software\\.nuget\\packages\\vslangproj90\\17.0.0-previews-4-31709-430\\vslangproj90.17.0.0-previews-4-31709-430.nupkg.sha512",
+    "C:\\Users\\Software\\.nuget\\packages\\websocket.client\\4.3.38\\websocket.client.4.3.38.nupkg.sha512"
   ],
   "logs": []
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
@@ -77,7 +78,17 @@ namespace CodeTime
             List<IntegrationConnection> connections = FileManager.GetIntegrationsByType("slack");
             foreach (IntegrationConnection workspace in connections)
             {
-                workspaceChildren.Add(CodeMetricsTreeProvider.BuildContextItemButton(workspace.authId, workspace.team_domain + " (" + workspace.team_name + ")", "deletion.png", RemoveWorkspaceClickHandler));
+                if (workspace.meta != null)
+                {
+                    try
+                    {
+                        IntegrationMeta meta = JsonConvert.DeserializeObject<IntegrationMeta>(workspace.meta);
+                        workspaceChildren.Add(CodeMetricsTreeProvider.BuildContextItemButton(meta.domain, meta.domain, "deletion.png", RemoveWorkspaceClickHandler));
+                    } catch (Exception ex)
+                    {
+                        LogManager.Error("Error converting metadata", ex);
+                    }
+                }
             }
             workspaceChildren.Add(CodeMetricsTreeProvider.BuildTreeItem("AddWorkspaceItem", "Add workspace", "add.png", AddWorkspaceClickHandler));
             TreeViewItem workspacesParent = BuildMetricNodes("workspaces", "Slack workspaces", workspaceChildren);
@@ -293,7 +304,7 @@ namespace CodeTime
                 Image deleteImage = (Image)args.Source;
                 if (deleteImage != null)
                 {
-                    UserManager.DisconnectSlackAuth(deleteImage.Name);
+                    UserManager.DisconnectSlackAuth(deleteImage.Tag.ToString());
                 }
             }
             catch (Exception) { };

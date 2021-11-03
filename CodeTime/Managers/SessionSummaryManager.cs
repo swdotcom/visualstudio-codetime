@@ -3,13 +3,40 @@ using System;
 using System.IO;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using Task = System.Threading.Tasks.Task;
 
 namespace CodeTime
 {
     public sealed class SessionSummaryManager
     {
+        private static Timer timer;
+        private static int FIVE_MINUTES_MILLIS = 1000 * 60 * 5;
+
+        public static void Initialize()
+        {
+            if (timer == null)
+            {
+                timer = new Timer(
+                      TimerTaskListener,
+                      null,
+                      1000,
+                      FIVE_MINUTES_MILLIS);
+            }
+        }
+
+        private static void TimerTaskListener(object stateinfo)
+        {
+            bool isWinActivated = AppUtil.ApplicationIsActivated();
+
+            if (!isWinActivated)
+            {
+                DocEventManager.Instance.PostData();
+            }
+
+            _ = UpdateSessionSummaryFromServerAsync();
+
+        }
 
         public static void ÇlearSessionSummaryData()
         {

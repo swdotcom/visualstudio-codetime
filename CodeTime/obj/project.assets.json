@@ -1343,6 +1343,24 @@
           "ref/netstandard/_._": {}
         }
       },
+      "System.Reactive/4.3.2": {
+        "type": "package",
+        "dependencies": {
+          "System.Threading.Tasks.Extensions": "4.5.3",
+          "System.ValueTuple": "4.5.0"
+        },
+        "frameworkAssemblies": [
+          "System.Windows",
+          "System.Windows.Forms",
+          "WindowsBase"
+        ],
+        "compile": {
+          "lib/net46/System.Reactive.dll": {}
+        },
+        "runtime": {
+          "lib/net46/System.Reactive.dll": {}
+        }
+      },
       "System.Reflection.Emit/4.7.0": {
         "type": "package",
         "compile": {
@@ -1372,11 +1390,14 @@
       },
       "System.Runtime.CompilerServices.Unsafe/5.0.0": {
         "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
         "compile": {
           "ref/net461/System.Runtime.CompilerServices.Unsafe.dll": {}
         },
         "runtime": {
-          "lib/net45/_._": {}
+          "lib/net45/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
       },
       "System.Security.AccessControl/5.0.0": {
@@ -1495,6 +1516,18 @@
           }
         }
       },
+      "System.Threading.Channels/4.7.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Threading.Tasks.Extensions": "4.5.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/System.Threading.Channels.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Threading.Channels.dll": {}
+        }
+      },
       "System.Threading.Tasks.Dataflow/5.0.0": {
         "type": "package",
         "compile": {
@@ -1509,11 +1542,26 @@
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "4.5.3"
         },
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
         "compile": {
           "lib/net461/System.Threading.Tasks.Extensions.dll": {}
         },
         "runtime": {
-          "lib/net461/_._": {}
+          "lib/net461/System.Threading.Tasks.Extensions.dll": {}
+        }
+      },
+      "System.ValueTuple/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net47/System.ValueTuple.dll": {}
+        },
+        "runtime": {
+          "lib/net47/System.ValueTuple.dll": {}
         }
       },
       "VSLangProj/17.0.0-previews-4-31709-430": {
@@ -1646,6 +1694,19 @@
         },
         "runtime": {
           "lib/net472/_._": {}
+        }
+      },
+      "Websocket.Client/4.3.38": {
+        "type": "package",
+        "dependencies": {
+          "System.Reactive": "4.3.2",
+          "System.Threading.Channels": "4.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Websocket.Client.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Websocket.Client.dll": {}
         }
       }
     },
@@ -3012,6 +3073,24 @@
           "ref/netstandard/_._": {}
         }
       },
+      "System.Reactive/4.3.2": {
+        "type": "package",
+        "dependencies": {
+          "System.Threading.Tasks.Extensions": "4.5.3",
+          "System.ValueTuple": "4.5.0"
+        },
+        "frameworkAssemblies": [
+          "System.Windows",
+          "System.Windows.Forms",
+          "WindowsBase"
+        ],
+        "compile": {
+          "lib/net46/System.Reactive.dll": {}
+        },
+        "runtime": {
+          "lib/net46/System.Reactive.dll": {}
+        }
+      },
       "System.Reflection.Emit/4.7.0": {
         "type": "package",
         "compile": {
@@ -3044,11 +3123,14 @@
       },
       "System.Runtime.CompilerServices.Unsafe/5.0.0": {
         "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
         "compile": {
           "ref/net461/System.Runtime.CompilerServices.Unsafe.dll": {}
         },
         "runtime": {
-          "lib/net45/_._": {}
+          "lib/net45/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
       },
       "System.Security.AccessControl/5.0.0": {
@@ -3131,6 +3213,18 @@
           "runtimes/win/lib/net461/_._": {}
         }
       },
+      "System.Threading.Channels/4.7.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Threading.Tasks.Extensions": "4.5.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/System.Threading.Channels.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Threading.Channels.dll": {}
+        }
+      },
       "System.Threading.Tasks.Dataflow/5.0.0": {
         "type": "package",
         "compile": {
@@ -3145,11 +3239,26 @@
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "4.5.3"
         },
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
         "compile": {
           "lib/net461/System.Threading.Tasks.Extensions.dll": {}
         },
         "runtime": {
-          "lib/net461/_._": {}
+          "lib/net461/System.Threading.Tasks.Extensions.dll": {}
+        }
+      },
+      "System.ValueTuple/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net47/System.ValueTuple.dll": {}
+        },
+        "runtime": {
+          "lib/net47/System.ValueTuple.dll": {}
         }
       },
       "VSLangProj/17.0.0-previews-4-31709-430": {
@@ -3282,6 +3391,19 @@
         },
         "runtime": {
           "lib/net472/_._": {}
+        }
+      },
+      "Websocket.Client/4.3.38": {
+        "type": "package",
+        "dependencies": {
+          "System.Reactive": "4.3.2",
+          "System.Threading.Channels": "4.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Websocket.Client.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Websocket.Client.dll": {}
         }
       }
     },
@@ -4648,6 +4770,24 @@
           "ref/netstandard/_._": {}
         }
       },
+      "System.Reactive/4.3.2": {
+        "type": "package",
+        "dependencies": {
+          "System.Threading.Tasks.Extensions": "4.5.3",
+          "System.ValueTuple": "4.5.0"
+        },
+        "frameworkAssemblies": [
+          "System.Windows",
+          "System.Windows.Forms",
+          "WindowsBase"
+        ],
+        "compile": {
+          "lib/net46/System.Reactive.dll": {}
+        },
+        "runtime": {
+          "lib/net46/System.Reactive.dll": {}
+        }
+      },
       "System.Reflection.Emit/4.7.0": {
         "type": "package",
         "compile": {
@@ -4680,11 +4820,14 @@
       },
       "System.Runtime.CompilerServices.Unsafe/5.0.0": {
         "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
         "compile": {
           "ref/net461/System.Runtime.CompilerServices.Unsafe.dll": {}
         },
         "runtime": {
-          "lib/net45/_._": {}
+          "lib/net45/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
       },
       "System.Security.AccessControl/5.0.0": {
@@ -4767,6 +4910,18 @@
           "runtimes/win/lib/net461/_._": {}
         }
       },
+      "System.Threading.Channels/4.7.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Threading.Tasks.Extensions": "4.5.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/System.Threading.Channels.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Threading.Channels.dll": {}
+        }
+      },
       "System.Threading.Tasks.Dataflow/5.0.0": {
         "type": "package",
         "compile": {
@@ -4781,11 +4936,26 @@
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "4.5.3"
         },
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
         "compile": {
           "lib/net461/System.Threading.Tasks.Extensions.dll": {}
         },
         "runtime": {
-          "lib/net461/_._": {}
+          "lib/net461/System.Threading.Tasks.Extensions.dll": {}
+        }
+      },
+      "System.ValueTuple/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net47/System.ValueTuple.dll": {}
+        },
+        "runtime": {
+          "lib/net47/System.ValueTuple.dll": {}
         }
       },
       "VSLangProj/17.0.0-previews-4-31709-430": {
@@ -4918,6 +5088,19 @@
         },
         "runtime": {
           "lib/net472/_._": {}
+        }
+      },
+      "Websocket.Client/4.3.38": {
+        "type": "package",
+        "dependencies": {
+          "System.Reactive": "4.3.2",
+          "System.Threading.Channels": "4.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Websocket.Client.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Websocket.Client.dll": {}
         }
       }
     },
@@ -6284,6 +6467,24 @@
           "ref/netstandard/_._": {}
         }
       },
+      "System.Reactive/4.3.2": {
+        "type": "package",
+        "dependencies": {
+          "System.Threading.Tasks.Extensions": "4.5.3",
+          "System.ValueTuple": "4.5.0"
+        },
+        "frameworkAssemblies": [
+          "System.Windows",
+          "System.Windows.Forms",
+          "WindowsBase"
+        ],
+        "compile": {
+          "lib/net46/System.Reactive.dll": {}
+        },
+        "runtime": {
+          "lib/net46/System.Reactive.dll": {}
+        }
+      },
       "System.Reflection.Emit/4.7.0": {
         "type": "package",
         "compile": {
@@ -6316,11 +6517,14 @@
       },
       "System.Runtime.CompilerServices.Unsafe/5.0.0": {
         "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
         "compile": {
           "ref/net461/System.Runtime.CompilerServices.Unsafe.dll": {}
         },
         "runtime": {
-          "lib/net45/_._": {}
+          "lib/net45/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
       },
       "System.Security.AccessControl/5.0.0": {
@@ -6403,6 +6607,18 @@
           "runtimes/win/lib/net461/_._": {}
         }
       },
+      "System.Threading.Channels/4.7.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Threading.Tasks.Extensions": "4.5.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/System.Threading.Channels.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Threading.Channels.dll": {}
+        }
+      },
       "System.Threading.Tasks.Dataflow/5.0.0": {
         "type": "package",
         "compile": {
@@ -6417,11 +6633,26 @@
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "4.5.3"
         },
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
         "compile": {
           "lib/net461/System.Threading.Tasks.Extensions.dll": {}
         },
         "runtime": {
-          "lib/net461/_._": {}
+          "lib/net461/System.Threading.Tasks.Extensions.dll": {}
+        }
+      },
+      "System.ValueTuple/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net47/System.ValueTuple.dll": {}
+        },
+        "runtime": {
+          "lib/net47/System.ValueTuple.dll": {}
         }
       },
       "VSLangProj/17.0.0-previews-4-31709-430": {
@@ -6554,6 +6785,19 @@
         },
         "runtime": {
           "lib/net472/_._": {}
+        }
+      },
+      "Websocket.Client/4.3.38": {
+        "type": "package",
+        "dependencies": {
+          "System.Reactive": "4.3.2",
+          "System.Threading.Channels": "4.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Websocket.Client.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Websocket.Client.dll": {}
         }
       }
     }
@@ -9102,6 +9346,32 @@
         "system.private.uri.nuspec"
       ]
     },
+    "System.Reactive/4.3.2": {
+      "sha512": "WhGkScPWxw2pp7UwRW8M1OvYZ3WUDPC2wJ0aiuaB4KRD3bt4wLkgHgYnOUu87WRhsurvv5LN0E63iWOEza2o8g==",
+      "type": "package",
+      "path": "system.reactive/4.3.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/netcoreapp3.0/System.Reactive.dll",
+        "build/netcoreapp3.0/System.Reactive.targets",
+        "build/netcoreapp3.0/System.Reactive.xml",
+        "buildTransitive/netcoreapp3.0/System.Reactive.targets",
+        "lib/net46/System.Reactive.dll",
+        "lib/net46/System.Reactive.xml",
+        "lib/netcoreapp3.0/_._",
+        "lib/netstandard2.0/System.Reactive.dll",
+        "lib/netstandard2.0/System.Reactive.xml",
+        "lib/uap10.0.16299/System.Reactive.dll",
+        "lib/uap10.0.16299/System.Reactive.pri",
+        "lib/uap10.0.16299/System.Reactive.xml",
+        "lib/uap10.0/System.Reactive.dll",
+        "lib/uap10.0/System.Reactive.pri",
+        "lib/uap10.0/System.Reactive.xml",
+        "system.reactive.4.3.2.nupkg.sha512",
+        "system.reactive.nuspec"
+      ]
+    },
     "System.Reflection.Emit/4.7.0": {
       "sha512": "VR4kk8XLKebQ4MZuKuIni/7oh+QGFmZW3qORd1GvBq/8026OpW501SzT/oypwiQl4TvT8ErnReh/NzY9u+C6wQ==",
       "type": "package",
@@ -9651,6 +9921,27 @@
         "version.txt"
       ]
     },
+    "System.Threading.Channels/4.7.0": {
+      "sha512": "gdOOXBhtt2UpTxYJm1DRmoqNfYg5ypvhzhVt0vxKhzxXFjS81r8yIOSFsJYLRa1Jc14GBAqCnjxJstO3zBN7gg==",
+      "type": "package",
+      "path": "system.threading.channels/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp3.0/System.Threading.Channels.dll",
+        "lib/netcoreapp3.0/System.Threading.Channels.xml",
+        "lib/netstandard1.3/System.Threading.Channels.dll",
+        "lib/netstandard1.3/System.Threading.Channels.xml",
+        "lib/netstandard2.0/System.Threading.Channels.dll",
+        "lib/netstandard2.0/System.Threading.Channels.xml",
+        "system.threading.channels.4.7.0.nupkg.sha512",
+        "system.threading.channels.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
     "System.Threading.Tasks.Dataflow/5.0.0": {
       "sha512": "NBp0zSAMZp4muDje6XmbDfmkqw9+qsDCHp+YMEtnVgHEjQZ3Q7MzFTTp3eHqpExn4BwMrS7JkUVOTcVchig4Sw==",
       "type": "package",
@@ -9710,6 +10001,50 @@
         "ref/xamarinwatchos10/_._",
         "system.threading.tasks.extensions.4.5.4.nupkg.sha512",
         "system.threading.tasks.extensions.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.ValueTuple/4.5.0": {
+      "sha512": "okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ==",
+      "type": "package",
+      "path": "system.valuetuple/4.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net461/System.ValueTuple.dll",
+        "lib/net461/System.ValueTuple.xml",
+        "lib/net47/System.ValueTuple.dll",
+        "lib/net47/System.ValueTuple.xml",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.0/System.ValueTuple.dll",
+        "lib/netstandard1.0/System.ValueTuple.xml",
+        "lib/netstandard2.0/_._",
+        "lib/portable-net40+sl4+win8+wp8/System.ValueTuple.dll",
+        "lib/portable-net40+sl4+win8+wp8/System.ValueTuple.xml",
+        "lib/uap10.0.16299/_._",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net461/System.ValueTuple.dll",
+        "ref/net47/System.ValueTuple.dll",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard2.0/_._",
+        "ref/portable-net40+sl4+win8+wp8/System.ValueTuple.dll",
+        "ref/uap10.0.16299/_._",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "system.valuetuple.4.5.0.nupkg.sha512",
+        "system.valuetuple.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
@@ -9966,6 +10301,22 @@
         "vslangproj90.17.0.0-previews-4-31709-430.nupkg.sha512",
         "vslangproj90.nuspec"
       ]
+    },
+    "Websocket.Client/4.3.38": {
+      "sha512": "KkQj9wlcDsnlWszixEW7Zpt2NrXqHhcywAqsgkSjnQb//d7Lj+dIWsOSjKFxFmkF/fPeE8ZbG6VCLsvfuuhP4A==",
+      "type": "package",
+      "path": "websocket.client/4.3.38",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/netstandard2.0/Websocket.Client.dll",
+        "lib/netstandard2.0/Websocket.Client.xml",
+        "lib/netstandard2.1/Websocket.Client.dll",
+        "lib/netstandard2.1/Websocket.Client.xml",
+        "websocket.client.4.3.38.nupkg.sha512",
+        "websocket.client.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -9974,7 +10325,8 @@
       "Microsoft.VSSDK.BuildTools >= 17.0.5232",
       "Microsoft.VisualStudio.SDK >= 17.0.0-previews-4-31709-430",
       "Newtonsoft.Json >= 13.0.1",
-      "Snowplow.Tracker >= 1.1.0"
+      "Snowplow.Tracker >= 1.1.0",
+      "Websocket.Client >= 4.3.38"
     ]
   },
   "packageFolders": {
@@ -10028,6 +10380,10 @@
           "Snowplow.Tracker": {
             "target": "Package",
             "version": "[1.1.0, )"
+          },
+          "Websocket.Client": {
+            "target": "Package",
+            "version": "[4.3.38, )"
           }
         }
       }

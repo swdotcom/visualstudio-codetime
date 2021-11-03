@@ -41,14 +41,20 @@ namespace CodeTime
             // add to the stack
             stack.Children.Add(label);
 
-            if (!string.IsNullOrEmpty(iconName))
+            try
             {
-                Image img = ImageManager.CreateImage(iconName);
-                img.MouseDown += handler;
-                img.Cursor = Cursors.Hand;
-                img.HorizontalAlignment = HorizontalAlignment.Right;
-                img.Name = id;
-                stack.Children.Add(img);
+                if (!string.IsNullOrEmpty(iconName))
+                {
+                    Image img = ImageManager.CreateImage(iconName);
+                    img.MouseDown += handler;
+                    img.Cursor = Cursors.Hand;
+                    img.HorizontalAlignment = HorizontalAlignment.Right;
+                    img.Tag = id;
+                    stack.Children.Add(img);
+                }
+            } catch (Exception e)
+            {
+                LogManager.Error("Error creating tree item image", e);
             }
 
             // assign the stack to the header
