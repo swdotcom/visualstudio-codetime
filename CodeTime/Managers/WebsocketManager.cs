@@ -17,9 +17,29 @@ namespace CodeTime
         private static int reconnectTimeoutSeconds = 60 * 15;
         private static int errorReconnectTimeoutSeconds = 60 * 16;
 
-        public static void Initialize(bool re_initialize = false)
+        private static IWebsocketClient client;
+
+        public static void ReconnectManually()
         {
-            if (initialized && !re_initialize) {
+            // if (ExitEvent != null)
+            // {
+            // LogManager.Info("Re-initializing websocket connection");
+            // ExitEvent.Set();
+            // }
+            // initialized = false;
+
+            // _ = Task.Delay(5000).ContinueWith((task) => { Initialize(); });
+            if (client != null)
+            {
+                client.Dispose();
+            }
+            initialized = false;
+            Initialize();
+        }
+
+        public static void Initialize()
+        {
+            if (initialized) {
                 return;
             }
 
@@ -27,14 +47,7 @@ namespace CodeTime
             if (string.IsNullOrEmpty(jwt))
             {
                 // try again in a minute
-                _ = Task.Delay(60000).ContinueWith((task) => { Initialize(re_initialize); });
-            }
-
-            if (re_initialize && ExitEvent != null)
-            {
-                LogManager.Info("Re-initializing websocket connection");
-                ExitEvent.Close();
-                ExitEvent.Dispose();
+                _ = Task.Delay(60000).ContinueWith((task) => { Initialize(); });
             }
 
             initialized = true;
@@ -43,7 +56,7 @@ namespace CodeTime
 
             var factory = new Func<ClientWebSocket>(() =>
             {
-                var client = new ClientWebSocket
+                var clientOptions = new ClientWebSocket
                 {
                     Options =
                     {
@@ -51,71 +64,71 @@ namespace CodeTime
                     }
                 };
 
-                client.Options.SetRequestHeader("X-SWDC-Plugin-Id", EnvUtil.getPluginId().ToString());
-                client.Options.SetRequestHeader("X-SWDC-Plugin-Name", EnvUtil.getPluginName());
-                client.Options.SetRequestHeader("X-SWDC-Plugin-Version", EnvUtil.GetVersion());
-                client.Options.SetRequestHeader("X-SWDC-Plugin-OS", EnvUtil.GetOs());
-                client.Options.SetRequestHeader("X-SWDC-Plugin-TZ", EnvUtil.getTimezone());
-                client.Options.SetRequestHeader("X-SWDC-Plugin-Offset", new NowTime().offset_seconds.ToString());
-                client.Options.SetRequestHeader("X-SWDC-Plugin-UUID", FileManager.getPluginUuid());
-                client.Options.SetRequestHeader("X-SWDC-Plugin-Type", "codetime");
-                client.Options.SetRequestHeader("X-SWDC-Plugin-Editor", "visual-studio");
-                client.Options.SetRequestHeader("X-SWDC-Plugin-Editor-Version", "2.6.3");
-
-                client.Options.SetRequestHeader("Authorization", FileManager.getItemAsString("jwt"));
-                return client;
+                clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-Id", EnvUtil.getPluginId().ToString());
+                clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-Name", EnvUtil.getPluginName());
+                clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-Version", EnvUtil.GetVersion());
+                clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-OS", EnvUtil.GetOs());
+                clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-TZ", EnvUtil.getTimezone());
+                clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-Offset", new NowTime().offset_seconds.ToString());
+                clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-UUID", FileManager.getPluginUuid());
+                clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-Type", "codetime");
+                clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-Editor", "visual-studio");
+                clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-Editor-Version", "2.6.3");
+                LogManager.Info("Updating websocket authorization header information");
+                clientOptions.Options.SetRequestHeader("Authorization", FileManager.getItemAsString("jwt"));
+                return clientOptions;
             });
 
             var url = new Uri("wss://api.software.com/websockets");
 
-            using (IWebsocketClient client = new WebsocketClient(url, factory))
+            client = new WebsocketClient(url, factory);
+            
+            client.Name = "VisualStudio_CodeTime";
+            client.ReconnectTimeout = TimeSpan.FromSeconds(reconnectTimeoutSeconds);
+            client.ErrorReconnectTimeout = TimeSpan.FromSeconds(errorReconnectTimeoutSeconds);
+            client.ReconnectionHappened.Subscribe(type =>
             {
-                client.Name = "SoftwareClient";
-                client.ReconnectTimeout = TimeSpan.FromSeconds(reconnectTimeoutSeconds);
-                client.ErrorReconnectTimeout = TimeSpan.FromSeconds(errorReconnectTimeoutSeconds);
-                client.ReconnectionHappened.Subscribe(type =>
-                {
-                    LogManager.Info($"Code Time: Reconnecting the websocket connection, url: {client.Url}");
-                });
-                client.DisconnectionHappened.Subscribe(info =>
-                {
-                    LogManager.Warning($"Code Time: Websocket connection was disconnected");
-                });
+                LogManager.Info($"Code Time: Reconnecting the websocket connection, url: {client.Url}");
+            });
+            client.DisconnectionHappened.Subscribe(info =>
+            {
+                LogManager.Warning($"Code Time: Websocket connection was disconnected");
+            });
 
-                client.MessageReceived.Subscribe(msg =>
-                {
-                    LogManager.Info($"Message received: {msg}");
-                    JObject jsonObj = JsonConvert.DeserializeObject<JObject>(msg.ToString());
-                    JToken body = jsonObj.GetValue("body");
+            client.MessageReceived.Subscribe(msg =>
+            {
+                LogManager.Info($"Message received: {msg}");
+                JObject jsonObj = JsonConvert.DeserializeObject<JObject>(msg.ToString());
+                JToken body = jsonObj.GetValue("body");
                     
-                    switch (jsonObj.GetValue("type").ToString())
-                    {
-                        case "flow_state":
-                            FlowStateHandler(body);
-                            break;
-                        case "flow_score":
-                            FlowScoreHandler();
-                            break;
-                        case "authenticated_plugin_user":
-                            AuthenticatedPluginUserHandler(body);
-                            break;
-                        case "current_day_stats_update":
-                            CurrentDayStatsUpdateHandler(body);
-                            break;
-                        case "user_integration_connection":
-                            UserIntegrationConnectionHandler(body);
-                            break;
-                    }
-                });
+                switch (jsonObj.GetValue("type").ToString())
+                {
+                    case "flow_state":
+                        FlowStateHandler(body);
+                        break;
+                    case "flow_score":
+                        FlowScoreHandler();
+                        break;
+                    case "authenticated_plugin_user":
+                        AuthenticatedPluginUserHandler(body);
+                        break;
+                    case "current_day_stats_update":
+                        CurrentDayStatsUpdateHandler(body);
+                        break;
+                    case "user_integration_connection":
+                        UserIntegrationConnectionHandler(body);
+                        break;
+                }
+            });
 
-                LogManager.Info("Starting Code Time websocket...");
-                client.Start().Wait();
-                LogManager.Info("Code Time websocket started.");
+            LogManager.Info("Starting Code Time websocket...");
+            client.Start().Wait();
+            LogManager.Info("Code Time websocket started.");
 
-                Task.Run(() => StartSendingPing(client));
+            Task.Run(() => StartSendingPing(client));
 
-                ExitEvent.WaitOne();
-            }
+            ExitEvent.WaitOne();
+            
 
             LogManager.Info("Code Time websocket stopped.");
         }

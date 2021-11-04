@@ -27,7 +27,7 @@ namespace CodeTime
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [Guid(CodeTimePackage.PackageGuidString)]
+    [Guid(PackageGuidString)]
     [ProvideAutoLoad(UIContextGuids.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof(CodeTimeExplorer), Window = ToolWindowGuids.SolutionExplorer, MultiInstances = false, Style = VsDockStyle.Tabbed)]

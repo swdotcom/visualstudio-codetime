@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CodeTime
@@ -64,6 +65,12 @@ namespace CodeTime
             {
                 LaunchUtil.launchLogin(authType.ToLower(), false);
             }
+        }
+
+        [STAThread]
+        public static async Task ShowLoggedInMessage()
+        {
+            MessageBox.Show("Successfully logged on to Code Time", "Code Time", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

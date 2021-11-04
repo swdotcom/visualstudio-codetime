@@ -47,11 +47,70 @@ namespace CodeTime
             try
             {
                 string content = File.ReadAllText(getSoftwareDataDir(true) + "\\sessionSummary.json", Encoding.UTF8);
-                return JsonConvert.DeserializeObject<SessionSummary>(content);
+                SessionSummary summary = JsonConvert.DeserializeObject<SessionSummary>(content);
+                if (summary == null)
+                {
+                    return new SessionSummary();
+                }
+                return summary;
             }
             catch (Exception)
             {
                 return new SessionSummary();
+            }
+        }
+
+        public static JObject getSoftwareSessionFileData()
+        {
+            try
+            {
+                string content = File.ReadAllText(getSoftwareSessionFile(), Encoding.UTF8);
+                JObject o = JsonConvert.DeserializeObject<JObject>(content);
+                if (o == null)
+                {
+                    return new JObject();
+                }
+                return o;
+            }
+            catch (Exception)
+            {
+                return new JObject();
+            }
+        }
+
+        public static JObject getDeviceFileData()
+        {
+            try
+            {
+                string content = File.ReadAllText(getDeviceFile(), Encoding.UTF8);
+                JObject o = JsonConvert.DeserializeObject<JObject>(content);
+                if (o == null)
+                {
+                    return new JObject();
+                }
+                return o;
+            }
+            catch (Exception)
+            {
+                return new JObject();
+            }
+        }
+
+        public static JObject getFlowChangeData()
+        {
+            try
+            {
+                string content = File.ReadAllText(getFlowChangeFile(), Encoding.UTF8);
+                JObject o = JsonConvert.DeserializeObject<JObject>(content);
+                if (o == null)
+                {
+                    return new JObject();
+                }
+                return o;
+            }
+            catch (Exception)
+            {
+                return new JObject();
             }
         }
 
@@ -145,71 +204,38 @@ namespace CodeTime
         public static object getItem(string key)
         {
             // read the session json file
-            string sessionFile = getSoftwareSessionFile();
-            if (File.Exists(sessionFile))
+            JObject o = getSoftwareSessionFileData();
+            if (o != null)
             {
-                using (StreamReader reader = File.OpenText(sessionFile))
-                {
-                    JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
-                    if (o != null)
-                    {
-                        return o.GetValue(key);
-                    }
-                }
+                return o.GetValue(key);
             }
             return null;
         }
 
         public static void setBoolItem(string key, bool val)
         {
-            JObject o = GetSessionJson();
+            JObject o = getSoftwareSessionFileData();
             o[key] = val;
-
-            File.WriteAllText(getSoftwareSessionFile(), JsonConvert.SerializeObject(o), Encoding.UTF8);
+            WriteFileContents(getSoftwareSessionFile(), o);
         }
 
         public static void setNumericItem(string key, long val)
         {
-            JObject o = GetSessionJson();
+            JObject o = getSoftwareSessionFileData();
             o[key] = val;
-
-            File.WriteAllText(getSoftwareSessionFile(), JsonConvert.SerializeObject(o), Encoding.UTF8);
+            WriteFileContents(getSoftwareSessionFile(), o);
         }
 
         public static void setItem(string key, string val)
         {
-            JObject o = GetSessionJson();
+            JObject o = getSoftwareSessionFileData();
             o[key] = val;
-
-            File.WriteAllText(getSoftwareSessionFile(), JsonConvert.SerializeObject(o), Encoding.UTF8);
-        }
-
-        private static JObject GetSessionJson()
-        {
-            string sessionFile = getSoftwareSessionFile();
-            using (StreamReader reader = File.OpenText(sessionFile))
-            {
-                JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
-                if (o == null)
-                {
-                    o = new JObject();
-                }
-                return o;
-            }
+            WriteFileContents(getSoftwareSessionFile(), o);
         }
 
         private static JObject GetDeviceJson()
         {
-            string file = getDeviceFile();
-            using (StreamReader reader = File.OpenText(file))
-            {
-                JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
-                if (o == null)
-                {
-                    o = new JObject();
-                }
-                return o;
-            }
+            return getDeviceFileData();
         }
 
         public static string getPluginUuid()
@@ -332,10 +358,7 @@ namespace CodeTime
             {
                 createDeviceFile();
             }
-            using (StreamReader reader = File.OpenText(deviceFile))
-            {
-                return (JObject)JToken.ReadFrom(new JsonTextReader(reader));
-            }
+            return getDeviceFileData();
         }
 
         private static void createDeviceFile()
@@ -355,24 +378,12 @@ namespace CodeTime
             string deviceFile = getDeviceFile();
 
             JObject o = GetDeviceJson();
-            o[key] = value;
-
-            File.WriteAllText(deviceFile, JsonConvert.SerializeObject(o), Encoding.UTF8);
-        }
-
-        private static JObject GetFlowChangeData()
-        {
-            using (StreamReader reader = File.OpenText(getFlowChangeFile()))
+            if (o == null)
             {
-                JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
-                if (o == null)
-                {
-                    return new JObject();
-                } else
-                {
-                    return o;
-                }
+                o = new JObject();
             }
+            o[key] = value;
+            WriteFileContents(deviceFile, o);
         }
 
         public static bool IsInFlow()
@@ -384,7 +395,7 @@ namespace CodeTime
                 UpdateFlowChange(false);
             }
 
-            JObject o = GetFlowChangeData();
+            JObject o = getFlowChangeData();
             JToken token = o.GetValue("in_flow");
             if (token != null)
             {
@@ -405,10 +416,24 @@ namespace CodeTime
         {
             string flowChangeFile = getFlowChangeFile();
 
-            JObject o = GetFlowChangeData();
+            JObject o = getFlowChangeData();
             o["in_flow"] = val;
+            WriteFileContents(flowChangeFile, o);
+        }
 
-            File.WriteAllText(flowChangeFile, JsonConvert.SerializeObject(o), Encoding.UTF8);
+        private static void WriteFileContents(string file, JObject o)
+        {
+            try
+            {
+                File.WriteAllText(file, JsonConvert.SerializeObject(o), Encoding.UTF8);
+                // using (StreamWriter writer = new StreamWriter(file))
+                // {
+                    // writer.Write(JsonConvert.SerializeObject(o), Encoding.UTF8);
+                // }
+            } catch (Exception ex)
+            {
+                LogManager.Error("Error writing " + file, ex);
+            }
         }
     }
 

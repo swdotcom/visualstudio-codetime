@@ -91,9 +91,9 @@ namespace CodeTime
 
                 Process.Start(url);
 
-                if (!UserManager.checkingLoginState)
+                bool switchingAccount = FileManager.getItemAsBool("switching_account");
+                if (!switchingAccount)
                 {
-                    UserManager.clearLoginStateCheck = false;
                     FileManager.setBoolItem("switching_account", switching_account);
                     Task.Delay(1000 * 15).ContinueWith((task) => { UserManager.RefetchUserStatusLazily(20); });
                 }

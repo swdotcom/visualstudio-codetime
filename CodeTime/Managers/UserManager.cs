@@ -11,10 +11,8 @@ namespace CodeTime
 {
     class UserManager
     {
-        public static bool checkingLoginState = false;
         public static bool isOnline = true;
         public static long lastOnlineCheck = 0;
-        public static bool clearLoginStateCheck = false;
 
         public static async Task<SoftwareUser> GetUser()
         {
@@ -49,11 +47,9 @@ namespace CodeTime
                 return;
             }
 
-            clearLoginStateCheck = true;
-            FileManager.setBoolItem("switching_account", false);
-            FileManager.setAuthCallbackState(null);
             if (user.registered == 1)
             {
+                ResetLoginCheckStates();
                 FileManager.setItem("jwt", user.plugin_jwt);
                 FileManager.setItem("name", user.email);
 
@@ -63,15 +59,15 @@ namespace CodeTime
 
         private static async Task AuthenticationSuccessStateReset(SoftwareUser user)
         {
-            MessageBox.Show("Successfully logged on to Code Time", "Code Time", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            WebsocketManager.Initialize(true);
+            WebsocketManager.ReconnectManually();
 
             FileManager.syncIntegrations(user.integration_connections);
 
             _ = PackageManager.RebuildTreeAsync();
 
             _ = SessionSummaryManager.UpdateSessionSummaryFromServerAsync();
+
+            _ = Notification.ShowLoggedInMessage();
         }
 
         public static async Task InitializeAnonIfNullSessionToken()
@@ -177,21 +173,19 @@ namespace CodeTime
 
         private static void ResetLoginCheckStates()
         {
-            clearLoginStateCheck = false;
-            checkingLoginState = false;
             FileManager.setAuthCallbackState(null);
             FileManager.setBoolItem("switching_account", false);
         }
 
         public static async void RefetchUserStatusLazily(int tryCountUntilFoundUser)
         {
-            if (clearLoginStateCheck)
+            bool switchingAccount = FileManager.getItemAsBool("switching_account");
+            if (!switchingAccount)
             {
                 ResetLoginCheckStates();
                 return;
             }
 
-            checkingLoginState = true;
             try
             {
                 SoftwareUser user = await GetRegistrationState(false);
@@ -221,7 +215,7 @@ namespace CodeTime
             catch (Exception ex)
             {
                 LogManager.Error("RefetchUserStatusLazily ,error : " + ex.Message, ex);
-                checkingLoginState = false;
+                ResetLoginCheckStates();
             }
         }
 
