@@ -9,9 +9,9 @@ namespace CodeTime
 {
     class HttpManager
     {
-        public static bool IsOk(HttpResponseMessage response)
+        public static bool IsOk(HttpResponseMessage resp)
         {
-            return (response != null && response.StatusCode == HttpStatusCode.OK);
+            return (resp != null && (resp.StatusCode == HttpStatusCode.OK || resp.StatusCode == HttpStatusCode.Created || resp.StatusCode == HttpStatusCode.Accepted));
         }
 
         public static async Task<HttpResponseMessage> AppRequest(HttpMethod httpMethod, string api, string optionalPayload = null)

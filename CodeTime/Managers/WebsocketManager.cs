@@ -20,6 +20,14 @@ namespace CodeTime
             if (initialized && !re_initialize) {
                 return;
             }
+
+            string jwt = FileManager.getItemAsString("jwt");
+            if (string.IsNullOrEmpty(jwt))
+            {
+                // try again in a minute
+                _ = Task.Delay(60000).ContinueWith((task) => { Initialize(re_initialize); });
+            }
+
             initialized = true;
 
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
