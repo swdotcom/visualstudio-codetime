@@ -11,7 +11,7 @@ namespace CodeTime
     public sealed class SessionSummaryManager
     {
         private static Timer timer;
-        private static int FIVE_MINUTES_MILLIS = 1000 * 60 * 5;
+        private static int THIRTY_MINUTES_MILLIS = 1000 * 60 * 30;
 
         public static void Initialize()
         {
@@ -21,7 +21,7 @@ namespace CodeTime
                       TimerTaskListener,
                       null,
                       1000,
-                      FIVE_MINUTES_MILLIS);
+                      THIRTY_MINUTES_MILLIS);
             }
         }
 
@@ -45,22 +45,7 @@ namespace CodeTime
 
         public static void SaveSessionSummaryToDisk(SessionSummary sessionSummary)
         {
-            string sessionSummaryFile = FileManager.getSessionSummaryFile();
-
-            if (FileManager.SessionSummaryFileExists())
-            {
-                File.SetAttributes(sessionSummaryFile, FileAttributes.Normal);
-            }
-
-            try
-            {
-                File.WriteAllText(sessionSummaryFile, JsonConvert.SerializeObject(sessionSummary), Encoding.UTF8);
-            }
-            catch (Exception)
-            {
-                //
-            }
-
+            FileManager.WriteSessionSummaryFileContents(sessionSummary);
         }
 
         public static async Task UpdateSessionSummaryFromServerAsync()

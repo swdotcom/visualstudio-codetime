@@ -21,14 +21,6 @@ namespace CodeTime
 
         public static void ReconnectManually()
         {
-            // if (ExitEvent != null)
-            // {
-            // LogManager.Info("Re-initializing websocket connection");
-            // ExitEvent.Set();
-            // }
-            // initialized = false;
-
-            // _ = Task.Delay(5000).ContinueWith((task) => { Initialize(); });
             if (client != null)
             {
                 client.Dispose();
@@ -74,7 +66,6 @@ namespace CodeTime
                 clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-Type", "codetime");
                 clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-Editor", "visual-studio");
                 clientOptions.Options.SetRequestHeader("X-SWDC-Plugin-Editor-Version", "2.6.3");
-                LogManager.Info("Updating websocket authorization header information");
                 clientOptions.Options.SetRequestHeader("Authorization", FileManager.getItemAsString("jwt"));
                 return clientOptions;
             });

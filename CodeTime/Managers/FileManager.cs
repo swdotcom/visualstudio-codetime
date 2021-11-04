@@ -42,11 +42,31 @@ namespace CodeTime
             return getSoftwareDataDir(true) + "\\integrations.json";
         }
 
+        public static string getSoftwareSessionFile()
+        {
+            return getSoftwareDataDir(true) + "\\session.json";
+        }
+
+        public static string getDeviceFile()
+        {
+            return getSoftwareDataDir(true) + "\\device.json";
+        }
+
+        public static string getFlowChangeFile()
+        {
+            return getSoftwareDataDir(true) + "\\flowChange.json";
+        }
+
+        public static string getLogFile()
+        {
+            return getSoftwareDataDir(true) + "\\Log.txt";
+        }
+
         public static SessionSummary getSessionSummaryFileData()
         {
             try
             {
-                string content = File.ReadAllText(getSoftwareDataDir(true) + "\\sessionSummary.json", Encoding.UTF8);
+                string content = File.ReadAllText(getSessionSummaryFile(), Encoding.UTF8);
                 SessionSummary summary = JsonConvert.DeserializeObject<SessionSummary>(content);
                 if (summary == null)
                 {
@@ -112,32 +132,6 @@ namespace CodeTime
             {
                 return new JObject();
             }
-        }
-
-        public static string getSoftwareSessionFile()
-        {
-            return getSoftwareDataDir(true) + "\\session.json";
-        }
-
-        public static string getDeviceFile()
-        {
-            return getSoftwareDataDir(true) + "\\device.json";
-        }
-
-        public static string getFlowChangeFile()
-        {
-            return getSoftwareDataDir(true) + "\\flowChange.json";
-        }
-
-        public static bool SessionSummaryFileExists()
-        {
-            string file = getSoftwareDataDir(true) + "\\sessionSummary.json";
-            return File.Exists(file);
-        }
-
-        public static string getLogFile()
-        {
-            return getSoftwareDataDir(true) + "\\Log.txt";
         }
 
         public static long getItemAsLong(string key)
@@ -231,11 +225,6 @@ namespace CodeTime
             JObject o = getSoftwareSessionFileData();
             o[key] = val;
             WriteFileContents(getSoftwareSessionFile(), o);
-        }
-
-        private static JObject GetDeviceJson()
-        {
-            return getDeviceFileData();
         }
 
         public static string getPluginUuid()
@@ -341,13 +330,9 @@ namespace CodeTime
                 string content = JsonConvert.SerializeObject(activeConnections);
                 File.WriteAllText(getIntegrationsFile(), content, Encoding.UTF8);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //
-            }
-            finally
-            {
-
+                LogManager.Error("Error synchronizing integrations", ex);
             }
         }
 
@@ -377,7 +362,7 @@ namespace CodeTime
         {
             string deviceFile = getDeviceFile();
 
-            JObject o = GetDeviceJson();
+            JObject o = getDeviceFileData();
             if (o == null)
             {
                 o = new JObject();
@@ -421,16 +406,33 @@ namespace CodeTime
             WriteFileContents(flowChangeFile, o);
         }
 
-        private static void WriteFileContents(string file, JObject o)
+        public static void WriteFileContents(string file, JObject o)
         {
             try
             {
+                if (File.Exists(file))
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                }
                 File.WriteAllText(file, JsonConvert.SerializeObject(o), Encoding.UTF8);
-                // using (StreamWriter writer = new StreamWriter(file))
-                // {
-                    // writer.Write(JsonConvert.SerializeObject(o), Encoding.UTF8);
-                // }
             } catch (Exception ex)
+            {
+                LogManager.Error("Error writing " + file, ex);
+            }
+        }
+
+        public static void WriteSessionSummaryFileContents(SessionSummary summary)
+        {
+            string file = FileManager.getSessionSummaryFile();
+            try
+            {
+                if (File.Exists(file))
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                }
+                File.WriteAllText(file, JsonConvert.SerializeObject(summary), Encoding.UTF8);
+            }
+            catch (Exception ex)
             {
                 LogManager.Error("Error writing " + file, ex);
             }

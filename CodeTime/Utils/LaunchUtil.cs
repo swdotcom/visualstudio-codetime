@@ -22,7 +22,7 @@ namespace CodeTime
 
         public static void launchReadme()
         {
-            Process.Start("https://www.github.com/swdotcom/visualstudio-codetime");
+            Process.Start("https://www.software.com/code-editors/visual-studio");
         }
 
         public static void launchSubmitIssue()
