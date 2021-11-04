@@ -6,7 +6,7 @@ namespace CodeTime
     class EnvUtil
     {
         public static string SNOWPLOW_FILE = "snowplowEvents.db";
-        private static string pluginName = "swdc-visualstudio";
+        private static string pluginName = "visualstudio-codetime";
         //
         // sublime = 1, vs code = 2, eclipse = 3, intellij = 4, visualstudio = 6, atom = 7
         //

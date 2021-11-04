@@ -16,7 +16,7 @@ namespace CodeTime
 
             try
             {
-                tracker = new TrackerManager("CodeTime", "swdc-visualstudio");
+                tracker = new TrackerManager("CodeTime", "visualstudio-codetime");
                 tracker.initializeTracker().ContinueWith(result =>
                 {
                     TrackEditorActionEvent("editor", "activate");

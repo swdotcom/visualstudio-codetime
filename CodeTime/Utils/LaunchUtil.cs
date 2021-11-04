@@ -22,12 +22,12 @@ namespace CodeTime
 
         public static void launchReadme()
         {
-            Process.Start("https://www.github.com/swdotcom/swdc-visualstudio");
+            Process.Start("https://www.github.com/swdotcom/visualstudio-codetime");
         }
 
         public static void launchSubmitIssue()
         {
-            Process.Start("https://www.github.com/swdotcom/swdc-visualstudio/issues");
+            Process.Start("https://www.github.com/swdotcom/visualstudio-codetime/issues");
         }
 
         public static void launchSettings()
