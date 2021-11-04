@@ -57,14 +57,21 @@ namespace CodeTime
                 FileManager.setItem("jwt", user.plugin_jwt);
                 FileManager.setItem("name", user.email);
 
-                MessageBox.Show("Successfully logged on to Code Time", "Code Time", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                WebsocketManager.Initialize(true);
-
-                _ = PackageManager.RebuildTreeAsync();
-
-                _ = SessionSummaryManager.UpdateSessionSummaryFromServerAsync();
+                _ = AuthenticationSuccessStateReset(user);
             }
+        }
+
+        private static async Task AuthenticationSuccessStateReset(SoftwareUser user)
+        {
+            MessageBox.Show("Successfully logged on to Code Time", "Code Time", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            WebsocketManager.Initialize(true);
+
+            FileManager.syncIntegrations(user.integration_connections);
+
+            _ = PackageManager.RebuildTreeAsync();
+
+            _ = SessionSummaryManager.UpdateSessionSummaryFromServerAsync();
         }
 
         public static async Task InitializeAnonIfNullSessionToken()
@@ -136,7 +143,7 @@ namespace CodeTime
             // check to see if we found the user or not
             PluginStateInfo pluginStateInfo = await GetPluginStateInfoFromResponseAsync(response);
 
-            if (pluginStateInfo == null && !string.IsNullOrEmpty(authType) && (authType.Equals("software") || authType.Equals("email")))
+            if (pluginStateInfo == null || pluginStateInfo.state.ToLower().Equals("not_found"))
             {
                 // use the jwt
                 response = await HttpManager.MetricsRequest(HttpMethod.Get, api, null);
@@ -163,21 +170,27 @@ namespace CodeTime
                     // set the jwt since its found
                     FileManager.setItem("jwt", pluginStateInfo.user.plugin_jwt);
                 }
-
-                FileManager.setBoolItem("switching_account", false);
-                FileManager.setAuthCallbackState(null);
             }
 
             return user;
+        }
+
+        private static void ResetLoginCheckStates()
+        {
+            clearLoginStateCheck = false;
+            checkingLoginState = false;
+            FileManager.setAuthCallbackState(null);
+            FileManager.setBoolItem("switching_account", false);
         }
 
         public static async void RefetchUserStatusLazily(int tryCountUntilFoundUser)
         {
             if (clearLoginStateCheck)
             {
-                clearLoginStateCheck = false;
+                ResetLoginCheckStates();
                 return;
             }
+
             checkingLoginState = true;
             try
             {
@@ -189,32 +202,19 @@ namespace CodeTime
                     {
                         tryCountUntilFoundUser -= 1;
 
-                        Task.Delay(1000 * 10).ContinueWith((task) => { RefetchUserStatusLazily(tryCountUntilFoundUser); });
+                        Task.Delay(1000 * 12).ContinueWith((task) => { RefetchUserStatusLazily(tryCountUntilFoundUser); });
                     }
                     else
                     {
                         // clear the auth, we've tried enough
-                        FileManager.setBoolItem("switching_account", false);
-                        FileManager.setAuthCallbackState(null);
-                        checkingLoginState = false;
+                        ResetLoginCheckStates();
                     }
                 }
                 else
                 {
-                    checkingLoginState = false;
-                    // clear the auth, we've tried enough
-                    FileManager.setBoolItem("switching_account", false);
-                    FileManager.setAuthCallbackState(null);
+                    ResetLoginCheckStates();
 
-                    // clear the time data summary and session summary
-                    SessionSummaryManager.ÇlearSessionSummaryData();
-
-                    // clear the integrations
-                    FileManager.syncIntegrations(user.integration_connections);
-
-                    // show they've logged on
-                    string msg = "Successfully logged on to Code Time.";
-                    LaunchUtil.ShowNotification("Code Time", msg);
+                    _ = AuthenticationSuccessStateReset(user);
 
                 }
             }

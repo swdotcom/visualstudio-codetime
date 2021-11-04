@@ -198,6 +198,20 @@ namespace CodeTime
             }
         }
 
+        private static JObject GetDeviceJson()
+        {
+            string file = getDeviceFile();
+            using (StreamReader reader = File.OpenText(file))
+            {
+                JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+                if (o == null)
+                {
+                    o = new JObject();
+                }
+                return o;
+            }
+        }
+
         public static string getPluginUuid()
         {
             string plugin_uuid;
@@ -340,7 +354,7 @@ namespace CodeTime
         {
             string deviceFile = getDeviceFile();
 
-            JObject o = GetSessionJson();
+            JObject o = GetDeviceJson();
             o[key] = value;
 
             File.WriteAllText(deviceFile, JsonConvert.SerializeObject(o), Encoding.UTF8);

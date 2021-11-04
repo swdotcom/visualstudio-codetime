@@ -40,7 +40,7 @@ namespace CodeTime
             if (string.IsNullOrEmpty(email))
             {
                 AccountPanel.Children.Add(BuildClickLabel("SignUpPanel", "paw.png", "Sign up", SwitchAccountsClickHandler));
-                AccountPanel.Children.Add(BuildClickLabel("LogInPanel", "paw.png", "Log up", SwitchAccountsClickHandler));
+                AccountPanel.Children.Add(BuildClickLabel("LogInPanel", "paw.png", "Log in", SwitchAccountsClickHandler));
             }
             else
             {

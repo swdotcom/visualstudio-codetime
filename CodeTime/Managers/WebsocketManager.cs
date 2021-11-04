@@ -13,7 +13,9 @@ namespace CodeTime
     {
         private static readonly ManualResetEvent ExitEvent = new ManualResetEvent(false);
         private static bool initialized = false;
-        private static int keepAliveSeconds = 60 * 3;
+        private static int keepAliveSeconds = 60;
+        private static int reconnectTimeoutSeconds = 60 * 15;
+        private static int errorReconnectTimeoutSeconds = 60 * 16;
 
         public static void Initialize(bool re_initialize = false)
         {
@@ -26,6 +28,13 @@ namespace CodeTime
             {
                 // try again in a minute
                 _ = Task.Delay(60000).ContinueWith((task) => { Initialize(re_initialize); });
+            }
+
+            if (re_initialize && ExitEvent != null)
+            {
+                LogManager.Info("Re-initializing websocket connection");
+                ExitEvent.Close();
+                ExitEvent.Dispose();
             }
 
             initialized = true;
@@ -41,6 +50,18 @@ namespace CodeTime
                         KeepAliveInterval = TimeSpan.FromSeconds(keepAliveSeconds),
                     }
                 };
+
+                client.Options.SetRequestHeader("X-SWDC-Plugin-Id", EnvUtil.getPluginId().ToString());
+                client.Options.SetRequestHeader("X-SWDC-Plugin-Name", EnvUtil.getPluginName());
+                client.Options.SetRequestHeader("X-SWDC-Plugin-Version", EnvUtil.GetVersion());
+                client.Options.SetRequestHeader("X-SWDC-Plugin-OS", EnvUtil.GetOs());
+                client.Options.SetRequestHeader("X-SWDC-Plugin-TZ", EnvUtil.getTimezone());
+                client.Options.SetRequestHeader("X-SWDC-Plugin-Offset", new NowTime().offset_seconds.ToString());
+                client.Options.SetRequestHeader("X-SWDC-Plugin-UUID", FileManager.getPluginUuid());
+                client.Options.SetRequestHeader("X-SWDC-Plugin-Type", "codetime");
+                client.Options.SetRequestHeader("X-SWDC-Plugin-Editor", "visual-studio");
+                client.Options.SetRequestHeader("X-SWDC-Plugin-Editor-Version", "2.6.3");
+
                 client.Options.SetRequestHeader("Authorization", FileManager.getItemAsString("jwt"));
                 return client;
             });
@@ -50,8 +71,8 @@ namespace CodeTime
             using (IWebsocketClient client = new WebsocketClient(url, factory))
             {
                 client.Name = "SoftwareClient";
-                client.ReconnectTimeout = TimeSpan.FromSeconds(30);
-                client.ErrorReconnectTimeout = TimeSpan.FromSeconds(30);
+                client.ReconnectTimeout = TimeSpan.FromSeconds(reconnectTimeoutSeconds);
+                client.ErrorReconnectTimeout = TimeSpan.FromSeconds(errorReconnectTimeoutSeconds);
                 client.ReconnectionHappened.Subscribe(type =>
                 {
                     LogManager.Info($"Code Time: Reconnecting the websocket connection, url: {client.Url}");
@@ -116,7 +137,7 @@ namespace CodeTime
 
         private static void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
         {
-            LogManager.Warning("Exiting process");
+            LogManager.Warning("Code Time: Exiting websocket");
             ExitEvent.Set();
         }
 
