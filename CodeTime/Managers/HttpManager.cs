@@ -34,7 +34,10 @@ namespace CodeTime
             };
             var cts = new CancellationTokenSource();
             HttpResponseMessage response = null;
+
             AddAuthorization(client, override_jwt);
+            AddHeaders(client);
+
             HttpContent contentPost = null;
             try
             {
@@ -125,6 +128,20 @@ namespace CodeTime
             {
                 client.DefaultRequestHeaders.Add("Authorization", override_jwt);
             }
+        }
+
+        private static void AddHeaders(HttpClient client)
+        {
+            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-Id", EnvUtil.getPluginId().ToString());
+            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-Name", EnvUtil.getPluginName());
+            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-Version", EnvUtil.GetVersion());
+            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-OS", EnvUtil.GetOs());
+            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-TZ", EnvUtil.getTimezone());
+            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-Offset", new NowTime().offset_seconds.ToString());
+            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-UUID", FileManager.getPluginUuid());
+            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-Type", "codetime");
+            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-Editor", "visual-studio");
+            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-Editor-Version", "2.6.3");
         }
     }
 }

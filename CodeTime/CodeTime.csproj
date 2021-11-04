@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Managers\TrackerEventManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
+    <Compile Include="Managers\WebsocketManager.cs" />
     <Compile Include="Models\CacheValue.cs" />
     <Compile Include="Models\CodeTimeKpm.cs" />
     <Compile Include="Models\CodeTimeKpmMetrics.cs" />

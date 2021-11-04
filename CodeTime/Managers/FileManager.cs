@@ -29,7 +29,7 @@ namespace CodeTime
 
         public static string GetSnowplowStorageFile()
         {
-            return getSoftwareDataDir(true) + "\\snowplow_events.db";
+            return getSoftwareDataDir(true) + "\\" + EnvUtil.SNOWPLOW_FILE + ".db";
         }
 
         public static string getSessionSummaryFile()

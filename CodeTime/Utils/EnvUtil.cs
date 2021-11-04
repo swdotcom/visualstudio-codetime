@@ -5,6 +5,7 @@ namespace CodeTime
 {
     class EnvUtil
     {
+        public static string SNOWPLOW_FILE = "snowplowEvents.db";
         private static string pluginName = "swdc-visualstudio";
         //
         // sublime = 1, vs code = 2, eclipse = 3, intellij = 4, visualstudio = 6, atom = 7
@@ -41,6 +42,21 @@ namespace CodeTime
         public static string getHostname()
         {
             return ExecUtil.GetFirstCommandResult("hostname", null);
+        }
+
+        public static string getTimezone()
+        {
+            string timezone;
+            if (TimeZone.CurrentTimeZone.DaylightName != null
+                && TimeZone.CurrentTimeZone.DaylightName != TimeZone.CurrentTimeZone.StandardName)
+            {
+                timezone = TimeZone.CurrentTimeZone.DaylightName;
+            }
+            else
+            {
+                timezone = TimeZone.CurrentTimeZone.StandardName;
+            }
+            return timezone;
         }
     }
 }

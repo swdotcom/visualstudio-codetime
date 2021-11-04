@@ -101,6 +101,7 @@ namespace CodeTime
 
                 if (!UserManager.checkingLoginState)
                 {
+                    UserManager.clearLoginStateCheck = false;
                     FileManager.setBoolItem("switching_account", switching_account);
                     Task.Delay(1000 * 10).ContinueWith((task) => { UserManager.RefetchUserStatusLazily(40); });
                 }

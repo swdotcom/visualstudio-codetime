@@ -14,21 +14,7 @@ namespace CodeTime
         public static bool checkingLoginState = false;
         public static bool isOnline = true;
         public static long lastOnlineCheck = 0;
-
-        public static async Task<bool> IsOnlineAsync()
-        {
-            long nowInSec = TimeUtil.GetNowInSeconds();
-            long thresholdSeconds = nowInSec - lastOnlineCheck;
-            if (thresholdSeconds > 60)
-            {
-                // 3 second timeout
-                HttpResponseMessage response = await HttpManager.MetricsRequest(HttpMethod.Get, "/ping", null);
-                isOnline = HttpManager.IsOk(response);
-                lastOnlineCheck = nowInSec;
-            }
-
-            return isOnline;
-        }
+        public static bool clearLoginStateCheck = false;
 
         public static async Task<SoftwareUser> GetUser()
         {
@@ -55,6 +41,32 @@ namespace CodeTime
             }
             return user;
         }
+
+        public static void AuthenticationCompleteHandler(SoftwareUser user)
+        {
+            if (user == null)
+            {
+                return;
+            }
+
+            clearLoginStateCheck = true;
+            FileManager.setBoolItem("switching_account", false);
+            FileManager.setAuthCallbackState(null);
+            if (user.registered == 1)
+            {
+                FileManager.setItem("jwt", user.plugin_jwt);
+                FileManager.setItem("name", user.email);
+
+                MessageBox.Show("Successfully logged on to Code Time", "Code Time", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                WebsocketManager.Initialize(true);
+
+                _ = PackageManager.RebuildTreeAsync();
+
+                _ = SessionSummaryManager.UpdateSessionSummaryFromServerAsync();
+            }
+        }
+
         public static async Task InitializeAnonIfNullSessionToken()
         {
             string jwt = FileManager.getItemAsString("jwt");
@@ -63,19 +75,9 @@ namespace CodeTime
                 string plugin_uuid = FileManager.getPluginUuid();
                 string auth_callback_state = FileManager.getAuthCallbackState(true);
                 string osUsername = Environment.UserName;
-                string timezone = "";
-                if (TimeZone.CurrentTimeZone.DaylightName != null
-                    && TimeZone.CurrentTimeZone.DaylightName != TimeZone.CurrentTimeZone.StandardName)
-                {
-                    timezone = TimeZone.CurrentTimeZone.DaylightName;
-                }
-                else
-                {
-                    timezone = TimeZone.CurrentTimeZone.StandardName;
-                }
 
                 JObject jsonObj = new JObject();
-                jsonObj.Add("timezone", timezone);
+                jsonObj.Add("timezone", EnvUtil.getTimezone());
                 jsonObj.Add("username", osUsername);
                 jsonObj.Add("hostname", EnvUtil.getHostname());
                 jsonObj.Add("plugin_uuid", plugin_uuid);
@@ -171,6 +173,11 @@ namespace CodeTime
 
         public static async void RefetchUserStatusLazily(int tryCountUntilFoundUser)
         {
+            if (clearLoginStateCheck)
+            {
+                clearLoginStateCheck = false;
+                return;
+            }
             checkingLoginState = true;
             try
             {

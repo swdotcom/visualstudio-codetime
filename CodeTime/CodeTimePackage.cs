@@ -145,6 +145,8 @@ namespace CodeTime
 
            TrackerEventManager.init();
 
+            WebsocketManager.Initialize();
+
             initialized = true;
         }
 
