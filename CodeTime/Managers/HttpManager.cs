@@ -141,7 +141,7 @@ namespace CodeTime
             client.DefaultRequestHeaders.Add("X-SWDC-Plugin-UUID", FileManager.getPluginUuid());
             client.DefaultRequestHeaders.Add("X-SWDC-Plugin-Type", "codetime");
             client.DefaultRequestHeaders.Add("X-SWDC-Plugin-Editor", "visual-studio");
-            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-Editor-Version", "2.6.7");
+            client.DefaultRequestHeaders.Add("X-SWDC-Plugin-Editor-Version", "2.6.8");
         }
     }
 }

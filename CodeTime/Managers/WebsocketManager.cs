@@ -83,7 +83,7 @@ namespace CodeTime
             });
             client.DisconnectionHappened.Subscribe(info =>
             {
-                LogManager.Warning($"Code Time: Websocket connection was disconnected");
+                LogManager.Warning($"Code Time: Websocket connection was disconnected: {info}");
             });
 
             client.MessageReceived.Subscribe(msg =>
