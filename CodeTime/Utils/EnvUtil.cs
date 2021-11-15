@@ -27,9 +27,14 @@ namespace CodeTime
             return string.Format("{0}.{1}.{2}", CodeTimeAssembly.Version.Major, CodeTimeAssembly.Version.Minor, CodeTimeAssembly.Version.Build);
         }
 
+        public static string GetEditorVersioon()
+        {
+            return Environment.Version.ToString();
+        }
+
         public static string GetOs()
         {
-            return System.Environment.OSVersion.VersionString;
+            return Environment.OSVersion.VersionString;
         }
 
         public static class CodeTimeAssembly
