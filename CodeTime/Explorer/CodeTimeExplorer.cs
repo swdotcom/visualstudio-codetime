@@ -36,9 +36,9 @@ namespace CodeTime
         {
             if (this.Content != null)
             {
-                ((CodeTimeExplorerControl)this.Content).RebuildAccountButtons();
-                ((CodeTimeExplorerControl)this.Content).RebuildFlowButtonsAsync();
-                ((CodeTimeExplorerControl)this.Content).RebuildStatsButtonsAsync();
+                _ = ((CodeTimeExplorerControl)this.Content).RebuildAccountButtons();
+                _ = ((CodeTimeExplorerControl)this.Content).RebuildFlowButtonsAsync();
+                _ = ((CodeTimeExplorerControl)this.Content).RebuildStatsButtonsAsync();
             }
         }
 

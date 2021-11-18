@@ -19,7 +19,7 @@ namespace CodeTime
                 tracker = new TrackerManager("CodeTime", "visualstudio-codetime");
                 tracker.initializeTracker().ContinueWith(result =>
                 {
-                    TrackEditorActionEvent("editor", "activate");
+                    _ = TrackEditorActionEvent("editor", "activate");
                 });
             }
             catch (Exception e)

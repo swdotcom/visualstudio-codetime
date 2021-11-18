@@ -11,7 +11,7 @@ namespace CodeTime
 
         public static async Task init()
         {
-            HttpResponseMessage response = await HttpManager.MetricsRequest(HttpMethod.Get, "/v1/flow_sessions", null);
+            HttpResponseMessage response = await HttpManager.AppRequest(HttpMethod.Get, "/plugin/flow_sessions");
             if (HttpManager.IsOk(response))
             {
                 try
@@ -35,8 +35,7 @@ namespace CodeTime
             {
                 JObject jsonObj = new JObject();
                 jsonObj.Add("automated", automated);
-                // await HttpManager.AppRequest(HttpMethod.Post, "/plugin/flow_sessions", jsonObj.ToString());
-                await HttpManager.MetricsRequest(HttpMethod.Post, "/v1/flow_sessions", jsonObj.ToString());
+                await HttpManager.AppRequest(HttpMethod.Post, "/plugin/flow_sessions", jsonObj.ToString());
                 FileManager.UpdateFlowChange(true);
             }
             _ = SessionSummaryManager.UpdateStatusBarWithSummaryDataAsync(null);
@@ -47,8 +46,7 @@ namespace CodeTime
         {
             if (FileManager.IsInFlow())
             {
-                // await HttpManager.AppRequest(HttpMethod.Delete, "/plugin/flow_sessions", null);
-                await HttpManager.MetricsRequest(HttpMethod.Delete, "/v1/flow_sessions", null);
+                await HttpManager.AppRequest(HttpMethod.Delete, "/plugin/flow_sessions");;
                 FileManager.UpdateFlowChange(false);
             }
             _ = SessionSummaryManager.UpdateStatusBarWithSummaryDataAsync(null);

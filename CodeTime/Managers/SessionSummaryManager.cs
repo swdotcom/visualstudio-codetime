@@ -50,8 +50,8 @@ namespace CodeTime
 
         public static async Task UpdateSessionSummaryFromServerAsync()
         {
-            string api = "/sessions/summary";
-            HttpResponseMessage response = await HttpManager.MetricsRequest(HttpMethod.Get, api);
+            string api = "/api/v1/user/session_summary";
+            HttpResponseMessage response = await HttpManager.AppRequest(HttpMethod.Get, api);
             if (HttpManager.IsOk(response))
             {
                 string responseBody = await response.Content.ReadAsStringAsync();

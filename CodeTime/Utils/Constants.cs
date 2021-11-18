@@ -13,6 +13,7 @@
         {
             get
             {
+                Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
                 if (CodeTimePackage.ObjDte == null)
                 {
                     return string.Empty;
