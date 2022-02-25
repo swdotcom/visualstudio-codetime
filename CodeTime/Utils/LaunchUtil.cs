@@ -50,24 +50,19 @@ namespace CodeTime
                 FileManager.setItem("authType", loginType);
 
                 JObject jsonObj = new JObject();
-                jsonObj.Add("plugin", "codetime");
                 jsonObj.Add("plugin_uuid", FileManager.getPluginUuid());
-                jsonObj.Add("pluginVersion", EnvUtil.GetVersion());
                 jsonObj.Add("plugin_id", EnvUtil.getPluginId());
                 jsonObj.Add("auth_callback_state", auth_callback_state);
-                jsonObj.Add("login", switching_account);
 
                 string jwt = FileManager.getItemAsString("jwt");
                 string url = "";
                 if (loginType.Equals("google"))
                 {
-                    jsonObj.Add("redirect", Constants.app_endpoint);
-                    url = Constants.metrics_endpoint + "/auth/google";
+                    url = Constants.app_endpoint + "/auth/google";
                 }
                 else if (loginType.Equals("github"))
                 {
-                    jsonObj.Add("redirect", Constants.app_endpoint);
-                    url = Constants.metrics_endpoint + "/auth/github";
+                    url = Constants.app_endpoint + "/auth/github";
                 }
                 else
                 {
