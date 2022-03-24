@@ -86,16 +86,16 @@ namespace CodeTime
                 jsonObj.Add("plugin_uuid", plugin_uuid);
                 jsonObj.Add("auth_callback_state", auth_callback_state);
 
-                string api = "/plugins/onboard";
+                string api = "/api/v1/anonymous_user";
                 string jsonData = jsonObj.ToString();
-                HttpResponseMessage response = await HttpManager.MetricsRequest(HttpMethod.Post, api, jsonData);
+                HttpResponseMessage response = await HttpManager.AppRequest(HttpMethod.Post, api, jsonData);
 
                 if (HttpManager.IsOk(response))
                 {
                     string responseBody = await response.Content.ReadAsStringAsync();
 
                     IDictionary<string, object> respObj = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody);
-                    respObj.TryGetValue("jwt", out object jwtObj);
+                    respObj.TryGetValue("plugin_jwt", out object jwtObj);
                     jwt = (jwtObj == null) ? null : Convert.ToString(jwtObj);
                     if (jwt != null)
                     {
