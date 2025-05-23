@@ -118,7 +118,7 @@ namespace CodeTime
                 string jwt = FileManager.getItemAsString("jwt");
                 if (!String.IsNullOrEmpty(jwt))
                 {
-                    if (jwt.Contains("JWT "))
+                    if (jwt.StartsWith("JWT "))
                     {
                         jwt = "Bearer " + jwt.Substring("JWT ".Length);
                     }

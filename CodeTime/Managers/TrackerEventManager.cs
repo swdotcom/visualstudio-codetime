@@ -39,10 +39,15 @@ namespace CodeTime
             {
                 return;
             }
+            
+            var authEntity = GetAuthEntity();
+            if (authEntity == null)
+            {
+                return;
+            }
 
             try
             {
-                AuthEntity authEntity = GetAuthEntity();
                 PluginEntity pluginEntity = GetPluginEntity();
 
                 RepoEntity repoEntity = null;
@@ -81,7 +86,8 @@ namespace CodeTime
 
                     tracker.TrackCodetimeEvent(codetimeEvent);
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 LogManager.Error("Unable to process code time information", e);
             }
@@ -98,6 +104,12 @@ namespace CodeTime
             {
                 return;
             }
+            
+            var authEntity = GetAuthEntity();
+            if (authEntity == null)
+            {
+                return;
+            }
 
             EditorActionEvent editorActionEvent = new EditorActionEvent();
             editorActionEvent.entity = entity;
@@ -105,7 +117,7 @@ namespace CodeTime
 
             // entities
             editorActionEvent.pluginEntity = GetPluginEntity();
-            editorActionEvent.authEntity = GetAuthEntity();
+            editorActionEvent.authEntity = authEntity;
 
             editorActionEvent.fileEntity = await GetFileEntity(fileName);
             editorActionEvent.projectEntity = await GetProjectEntity(fileName);
@@ -121,6 +133,11 @@ namespace CodeTime
             {
                 return;
             }
+            var authEntity = GetAuthEntity();
+            if (authEntity == null)
+            {
+                return;
+            }
 
             UIInteractionEvent uIInteractionEvent = new UIInteractionEvent();
             uIInteractionEvent.interaction_type = interaction_type;
@@ -128,7 +145,7 @@ namespace CodeTime
 
             // entities
             uIInteractionEvent.pluginEntity = GetPluginEntity();
-            uIInteractionEvent.authEntity = GetAuthEntity();
+            uIInteractionEvent.authEntity = authEntity;
 
             tracker.TrackUIInteractionEvent(uIInteractionEvent);
         }
@@ -136,9 +153,14 @@ namespace CodeTime
         private static AuthEntity GetAuthEntity()
         {
             string jwt = FileManager.getItemAsString("jwt");
-            AuthEntity authEntity = new AuthEntity();
-            authEntity.jwt = !string.IsNullOrEmpty(jwt) ? jwt.Substring("JWT ".Length) : jwt;
-            return authEntity;
+            jwt = !string.IsNullOrEmpty(jwt) && jwt.StartsWith("JWT ") ? jwt.Substring("JWT ".Length) : jwt;
+            if (String.IsNullOrEmpty(jwt))
+            {
+                return null;
+            } else
+            {
+                return new AuthEntity  { jwt = jwt };
+            }
         }
 
         private static PluginEntity GetPluginEntity()
